@@ -1,0 +1,596 @@
+<vex-page-layout class="w-full px-gutter container">
+  <!-- <vex-secondary-toolbar current="Content Provider">
+    <vex-breadcrumbs [crumbs]="['Content Provider']" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar> -->
+
+  <div vexContainer>
+
+    <!-- CONTENT -->
+    <div id="overlay" *ngIf="isProcessing">
+        <mat-spinner class="waiting-spinner"></mat-spinner>
+    </div>
+    <div class="p-6 button-group">
+      <button mat-raised-button color="accent" class="content-next-btn mr-3" *ngIf="tabIndex!=0" (click)="backBtn()">
+        Prev
+      </button>
+      <button mat-raised-button color="primary" class="content-next-btn " *ngIf="tabIndex!=3" (click)="nextBtn()">
+        {{objLang.translates['contentcontent'+'next']}}
+      </button>
+      <button [ngClass]="['bg-green-500', 'text-contrast-white']" mat-raised-button type="button" *ngIf="tabIndex==3" (click)="saveContentData()">{{ objLang.translates['contentcontent'+'save'] }}</button>
+    </div>
+    <div class="content-tab-group">
+      <mat-tab-group dynamicHeight="true" [(selectedIndex)]="tabIndex">
+          <mat-tab label="General">
+            <div class="content p-6">
+              <!-- <p class="selLang">{{this.selectedLanguage }}</p> -->
+              <button mat-raised-button color="primary" class="update-btn mr-12" (click)="saveContentData()">{{objLang.translates['contentcontent'+'save']}}</button>
+              <mat-card *ngFor="let contentHeader of contentHeadersGeneral" class="mb-4">  
+                <div fxLayout='row' fxLayoutAlign="start start">
+                  <div fxLayout="column" class="mat-h2">{{objLang.translates['contentcontent'+contentHeader.name]}}</div>
+                  <button fxLayout="column" mat-icon-button
+                      matTooltipPosition="after" [matTooltip]="objLang.translates['contentcontent'+contentHeader.name+'_tip']"
+                      aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                      <mat-icon [icIcon]="icInfo"></mat-icon>
+                  </button>
+                </div>
+                <div  *ngIf="contentHeader.name == 'interest_variant'">
+                  <div fxLayout='row wrap' class="row">
+                    <div fxFlex="100" fxFlex.gt-sm="20" class="column"  >
+                      <mat-form-field appearance="legacy">
+                        <mat-label>{{objLang.translates['contentcontent'+'interest_variant']}}</mat-label>
+                        <mat-select [(ngModel)]="objLang.contentVals['interest_accepted']">
+                          <mat-option [value]="interest_accepted_option.name" *ngFor="let interest_accepted_option of interest_accepted_options">
+                            {{objLang.translates['contentcontent'+interest_accepted_option.name]}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="20" class="column" *ngIf="objLang.contentVals['interest_accepted'] != interest_accepted_options[0].name">
+                      <mat-form-field appearance="legacy">
+                        <mat-label>{{objLang.translates['contentcontent'+'interest_fixed']}}</mat-label>
+                        <input matInput type="number" step="{{contentSteps['interest_fixed']}}" 
+                        (input)="countDecimals('interest_fixed')" [(ngModel)]="objLang.contentVals['interest_fixed']">
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngIf="objLang.contentVals['interest_accepted'] != interest_accepted_options[1].name">
+                      <mat-form-field appearance="legacy">
+                        <mat-label>{{objLang.translates['contentcontent'+'interest_reference']}}</mat-label>
+                        <mat-select [(ngModel)]="objLang.contentVals['interest_reference']">
+                            <mat-option [value]="interest_reference_option.name" *ngFor="let interest_reference_option of interest_reference_options">
+                              {{objLang.translates['contentcontent'+interest_reference_option.name]}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout='row wrap' class="row" *ngIf="objLang.contentVals['interest_accepted'] != interest_accepted_options[0].name">
+                    <div fxFlex="100" fxFlex.gt-sm="40" class="column">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="no">
+                              <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+                              <mat-cell *matCellDef="let element;let i=index"> 
+                                <span class="mobile-label">No:</span>
+                                {{i+1}} 
+                              </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="years">
+                              <mat-header-cell *matHeaderCellDef> Years </mat-header-cell>
+                              <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Years:</span>
+                                {{element.val}} 
+                              </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                              <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                              <mat-cell *matCellDef="let element;let i=index">
+                                <span class="mobile-label">Status:</span>
+                                <mat-checkbox class="example-margin" color="primary" [(ngModel)] = "surchargeStatus[element.name]"></mat-checkbox>
+                              </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="surcharge">
+                              <mat-header-cell *matHeaderCellDef> Surcharge </mat-header-cell>
+                              <mat-cell *matCellDef="let element;let i=index">
+                                <span class="mobile-label">Surcharge:</span>
+                                <mat-form-field appearance="legacy" class="">
+                                  <input type="number"
+                                          aria-label="Number"
+                                          matInput
+                                          [matAutocomplete]="auto"
+                                          step="{{contentSteps[element.name]}}"
+                                          [(ngModel)] = "objLang.contentVals[element.name]">
+                                  <mat-autocomplete #auto="matAutocomplete">
+                                      <mat-option [value]="interest_surcharge_option" *ngFor="let interest_surcharge_option of interest_surcharge_options">{{interest_surcharge_option}}</mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field>
+                              </mat-cell>
+                            </ng-container>
+                          
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                          </table>
+                      </div>
+                  </div>
+                </div>
+                <!-- Internal costs -->
+                <div  *ngIf="contentHeader.name == 'internal_costs'" fxLayout='row wrap' class="row">
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column">
+                    <mat-form-field appearance="legacy">
+                      <input matInput type="number" step="{{contentSteps['internal_val']}}" (input)="countDecimals('internal_val')" [(ngModel)] = "objLang.contentVals['internal_val']">
+                    </mat-form-field>
+                  </div>                    
+                </div>
+                <!-- Funding per case -->
+                <div fxLayout='row wrap' class="row" *ngIf="contentHeader.name == 'funding_case'">
+                    <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let funding_case_element of funding_case_elements">
+                      <mat-form-field appearance="legacy">
+                        <mat-label>{{objLang.translates['contentcontent'+funding_case_element.name]}}</mat-label>
+                        <input matInput type="number" step="{{contentSteps[funding_case_element.name]}}" (input)="countDecimals(funding_case_element.name)" [(ngModel)] = "objLang.contentVals[funding_case_element.name]">
+                      </mat-form-field>
+                      <div class="inputError" *ngIf="objLang.contentVals[funding_case_elements[0].name]>objLang.contentVals[funding_case_elements[1].name]">
+                        *Minimum shouldn be less than maximum
+                      </div>
+                    </div>
+                </div>
+              </mat-card>
+              
+            </div>
+          </mat-tab>
+      
+          <mat-tab label="Basic">
+            <div class="content p-6">
+              <mat-card *ngFor="let contentHeader of contentHeadersBasis" class="mb-4">  
+                <div fxLayout='row wrap'>
+                  <div class="mat-h2">{{objLang.translates['contentcontent'+contentHeader.name]}}</div>
+                  <button mat-icon-button
+                      matTooltipPosition="after" [matTooltip]="objLang.translates['contentcontent'+contentHeader.name+'_tip']"
+                      aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                      <mat-icon [icIcon]="icInfo"></mat-icon>
+                  </button>
+                </div>
+                <!-- Purchasing -->
+                <div *ngIf="contentHeader.name == 'purchasing'" fxLayout='row wrap' class="row">
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let purchasing_element of purchasing_elements">                        
+                    <mat-form-field appearance="legacy" *ngIf="(purchasing_element.name == 'purchasing_min') ||(purchasing_element.name == 'purchasing_max')" (input)="countDecimals(purchasing_element.name)">
+                      <mat-label>{{objLang.translates['contentcontent'+purchasing_element.name]}}</mat-label>
+                      <input type="number"
+                        step="{{contentSteps[purchasing_element.name]}}" 
+                        (input)="setPurchasingRange(objLang.contentVals['purchasing_min'], objLang.contentVals['purchasing_max'])"
+                        aria-label="Number"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [(ngModel)] = "objLang.contentVals[purchasing_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete" (optionSelected)="setPurchasingRange(objLang.contentVals['purchasing_min'], objLang.contentVals['purchasing_max'])">
+                          <mat-option [value]="purchasing_option" *ngFor="let purchasing_option of purchasing_options">{{purchasing_option}}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(purchasing_element.category == 'content_ranges') && (objLang.contentVals['purchasing_min']>objLang.contentVals['purchasing_max'])">
+                      *Minimum should be less than maximum
+                    </div>
+                    <mat-form-field appearance="legacy" *ngIf="purchasing_element.name == 'purchasing_reduction_starting'">
+                        <mat-label>{{objLang.translates['contentcontent'+purchasing_element.name]}}</mat-label>
+                        <input type="text"
+                          step="{{contentSteps[purchasing_element.name]}}" 
+                          (input)="countDecimals(purchasing_element.name)"
+                          aria-label="Number"
+                          matInput
+                          [matAutocomplete]="auto"
+                          [(ngModel)] = "objLang.contentVals[purchasing_element.name]">
+                          <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                          <mat-autocomplete  #auto="matAutocomplete"  >
+                              <mat-option [value]="purchasing_starting_option" *ngFor="let purchasing_starting_option of objLang.purchasing_starting_options">{{purchasing_starting_option}}</mat-option>
+                          </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field appearance="legacy" *ngIf="purchasing_element.name == 'purchasing_reduction' && objLang.contentVals['purchasing_reduction_starting'] != objLang.translates['contentcontent'+'no_reduction']">
+                        <mat-label>{{objLang.translates['contentcontent'+purchasing_element.name]}}</mat-label>
+                        <input type="text"
+                          step="{{contentSteps[purchasing_element.name]}}" 
+                          (input)="countDecimals(purchasing_element.name)"
+                          aria-label="Number"
+                          matInput
+                          [matAutocomplete]="auto"
+                          [(ngModel)] = "objLang.contentVals[purchasing_element.name]">
+                        <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                        <mat-autocomplete  #auto="matAutocomplete">
+                            <mat-option [value]="purchasing_reductions_option" *ngFor="let purchasing_reductions_option of objLang['purchasing_reductions_options']">{{purchasing_reductions_option}}</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>  
+                  </div>
+                </div>
+                <!-- Loan amount -->
+                <div  *ngIf="contentHeader.name == 'loan_amount'" fxLayout='row wrap' class="row">
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let loan_amount_element of loan_amount_elements">                        
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+loan_amount_element.name]}}</mat-label>
+                      <input type="number"
+                        step="{{contentSteps[loan_amount_element.name]}}" 
+                        (input)="countDecimals(loan_amount_element.name)"
+                        aria-label="Number"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [(ngModel)] = "objLang.contentVals[loan_amount_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="purchasing_option" *ngFor="let purchasing_option of purchasing_options">{{purchasing_option}}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals[loan_amount_elements[0].name]>objLang.contentVals[loan_amount_elements[1].name])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                </div>
+                <!-- Loan term -->
+                <div *ngIf="contentHeader.name == 'loan_term'" fxLayout='row wrap' class="row">
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let loan_term_element of loan_term_elements">                        
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+loan_term_element.name]}}</mat-label>
+                      <input type="number"
+                        step="{{contentSteps[loan_term_element.name]}}" 
+                        (input)="countDecimals(loan_term_element.name)"
+                        aria-label="Number"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [(ngModel)] = "objLang.contentVals[loan_term_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="loan_term_option" *ngFor="let loan_term_option of loan_term_options">{{loan_term_option}}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals[loan_term_elements[0].name]>objLang.contentVals[loan_term_elements[1].name])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                </div>
+                <!-- Content reductions  -->
+                <div *ngIf="contentHeader.category == 'content_reductions'" fxLayout='row wrap' class="row" fxLayoutWrap>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let content_reduction_element of reduction_group[contentHeader.name]">                        
+                    <mat-form-field appearance="legacy" id="matForm">
+                      <mat-label>{{content_reduction_element.variety == 'number'?content_reduction_element.val:objLang.translates['contentcontent'+content_reduction_element.name]}}</mat-label>
+                      <input [type]="contentTypes[content_reduction_element.name]"
+                                step="{{contentSteps[content_reduction_element.name]}}" 
+                                (input)="countDecimals(content_reduction_element.name)"
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="auto" 
+                                [(ngModel)]="objLang.contentVals[content_reduction_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="reduction_option" *ngFor="let reduction_option of objLang.reduction_options">{{reduction_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-card>
+              <div>
+              </div>
+            </div>
+          </mat-tab>
+      
+          <mat-tab label="Individual">
+            <div class="content p-6">
+              <mat-card *ngFor="let contentHeader of contentHeadersIndividual" class="mb-4">
+                <div fxLayout='row wrap' fxLayoutAlign="start start" fxLayoutAlign="start start" class="row" class="content-title-bar">
+                  <div class="title mb-3">{{objLang.translates['contentcontent'+contentHeader.name]}}</div>
+                  <button mat-icon-button
+                      matTooltipPosition="after" [matTooltip]="objLang.translates['contentcontent'+contentHeader.name+'_tip']"
+                      aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                      <mat-icon [icIcon]="icInfo"></mat-icon>
+                  </button>
+                </div>
+                <!-- Kids -->
+                <div  *ngIf="contentHeader.name == 'kids'" fxLayout='row wrap' class="row" fxLayoutAlign="left center">
+                  <!-- If kids, add min and max -->
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column" *ngIf="contentHeader.name == 'kids'">
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+'kids_min']}}</mat-label> 
+                      <input type="number"
+                        step="{{contentSteps['kids_min']}}" 
+                        (input)="changeKidsRange()"
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="auto"
+                                [(ngModel)]="objLang.contentVals['kids_min']">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete" (optionSelected)='changeKidsRange()'>
+                          <mat-option [value]="kids_option" *ngFor="let kids_option of kids_options">{{kids_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals['kids_min']>objLang.contentVals['kids_max'])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column" *ngIf="contentHeader.name == 'kids'">
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+'kids_max']}}</mat-label>
+                      <input type="number"
+                                step="{{contentSteps['kids_max']}}" 
+                                (input)="changeKidsRange()"
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="auto"
+                                [(ngModel)]="objLang.contentVals['kids_max']">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete" (optionSelected)='changeKidsRange()'>
+                          <mat-option [value]="kids_option" *ngFor="let kids_option of kids_options">{{kids_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals['kids_min']>objLang.contentVals['kids_max'])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let content_reduction_element of kids_reductions_available">                        
+                    <mat-form-field appearance="legacy" id="matForm">
+                      <mat-label>{{content_reduction_element.variety == 'number'?content_reduction_element.val:objLang.translates['contentcontent'+content_reduction_element.name]}}</mat-label>
+                      <input [type]="contentTypes[content_reduction_element.name]"
+                                step="{{contentSteps[content_reduction_element.name]}}" 
+                                (input)="countDecimals(content_reduction_element.name)"
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="auto" 
+                                [(ngModel)]="objLang.contentVals[content_reduction_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="reduction_option" *ngFor="let reduction_option of objLang.reduction_options">{{reduction_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column">
+                    <button mat-icon-button class="content-icon-add" (click)="addKids()">
+                      <mat-icon matSuffix [icIcon]="icAdd"></mat-icon>
+                    </button>
+                    <button *ngIf="objLang.contentVals['kids_to'] > 1" mat-icon-button color="warn" class="content-icon-remove" (click)="reduceKids()">
+                      <mat-icon [icIcon]="icRemove"></mat-icon>
+                    </button>
+                  </div>   
+                </div>
+                <!-- Content reductions  -->
+                <div *ngIf="(contentHeader.category == 'content_reductions') && (contentHeader.name != 'kids')" fxLayout='row wrap' class="row" fxLayoutWrap>
+                  <!-- If age, add min and max -->
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column" *ngIf="contentHeader.name == 'age'">
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+age_elements[0].name]}}</mat-label>
+                      <input type="number"
+                        step="{{contentSteps[age_elements[0].name]}}" 
+                        (input)="countDecimals(age_elements[0].name)"
+                        aria-label="Number"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [(ngModel)]="objLang.contentVals[age_elements[0].name]">
+                        <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="age_option" *ngFor="let age_option of age_options">{{age_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals[age_elements[0].name]>objLang.contentVals[age_elements[1].name])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column" *ngIf="contentHeader.name == 'age'">
+                    <mat-form-field appearance="legacy">
+                      <mat-label>{{objLang.translates['contentcontent'+age_elements[1].name]}}</mat-label>
+                      <input type="number"
+                        step="{{contentSteps[age_elements[1].name]}}" 
+                        (input)="countDecimals(age_elements[1].name)"
+                        aria-label="Number"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [(ngModel)]="objLang.contentVals[age_elements[1].name]">
+                        <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="age_option" *ngFor="let age_option of age_options">{{age_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                    <div class="inputError" *ngIf="(objLang.contentVals[age_elements[0].name]>objLang.contentVals[age_elements[1].name])">
+                      *Minimum shouldn be less than maximum
+                    </div>
+                  </div>
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let content_reduction_element of reduction_group[contentHeader.name]">                        
+                    <mat-form-field appearance="legacy" id="matForm">
+                      <mat-label>{{content_reduction_element.variety == 'number'?content_reduction_element.val:objLang.translates['contentcontent'+content_reduction_element.name]}}</mat-label>
+                      <input [type]="contentTypes[content_reduction_element.name]"
+                                step="{{contentSteps[content_reduction_element.name]}}" 
+                                (input)="countDecimals(content_reduction_element.name)"
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="auto" 
+                                [(ngModel)]="objLang.contentVals[content_reduction_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="reduction_option" *ngFor="let reduction_option of objLang.reduction_options">{{reduction_option}}</mat-option>
+                      </mat-autocomplete> 
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!-- Net income -->
+                <div  *ngIf="contentHeader.name == 'net_income'" fxLayout='row wrap' class="row">
+                    <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let net_income_element of net_usual_group">                        
+                      <mat-form-field appearance="legacy" *ngIf="net_income_element.name == 'net_min'">
+                        <mat-label>{{objLang.translates['contentcontent'+net_income_element.name]}}</mat-label>
+                        <input type="number"
+                                  step="{{contentSteps[net_income_element.name]}}" 
+                                  (input)="countDecimals(net_income_element.name)"
+                                  aria-label="Number"
+                                  matInput
+                                  [matAutocomplete]="auto"
+                                  [(ngModel)]="objLang.contentVals[net_income_element.name]">
+                        <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                        <mat-autocomplete  #auto="matAutocomplete">
+                            <mat-option [value]="net_min_option" *ngFor="let net_min_option of net_min_options">{{net_min_option}}</mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <mat-form-field appearance="legacy"*ngIf="net_income_element.name == 'net_not_ratio'">
+                        <mat-label>{{objLang.translates['contentcontent'+net_income_element.name]}}</mat-label>
+                        <input type="number"
+                                  step="{{contentSteps[net_income_element.name]}}" 
+                                  (input)="countDecimals(net_income_element.name)"
+                                  aria-label="Number"
+                                  matInput
+                                  [matAutocomplete]="auto"
+                                  [(ngModel)]="objLang.contentVals[net_income_element.name]">
+                        <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                        <mat-autocomplete  #auto="matAutocomplete">
+                            <mat-option [value]="net_not_ratio_option" *ngFor="let net_not_ratio_option of net_not_ratio_options">{{net_not_ratio_option}}</mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="40" class="content-grid-tile">
+                      <div fxLayout="row wrap">
+                        <div fxFlex="50" class="column">                      
+                          <mat-form-field appearance="legacy" *ngFor="let net_income_element of net_ratio_group_available">
+                            <mat-label>{{objLang.translates['contentcontent'+net_income_element.variety]}}</mat-label>
+                            <input type="number"
+                                      step="{{contentSteps[net_income_element.name]}}" 
+                                      (input)="countDecimals(net_income_element.name)"
+                                      aria-label="Number"
+                                      matInput
+                                      [matAutocomplete]="auto"
+                                      [(ngModel)]="objLang.contentVals[net_income_element.name]">
+                            <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                            <mat-autocomplete  #auto="matAutocomplete">
+                                <mat-option [value]="net_ratio_option" *ngFor="let net_ratio_option of net_ratio_options">{{net_ratio_option}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        <div fxFlex="50" class="column">                      
+                          <mat-form-field appearance="legacy" *ngFor="let net_income_element of net_reduction_group_available">
+                            <mat-label>{{objLang.translates['contentcontent'+net_income_element.variety]}}</mat-label>
+                            <input type="text"
+                                      step="{{contentSteps[net_income_element.name]}}" 
+                                      (input)="countDecimals(net_income_element.name)"
+                                      aria-label="Number"
+                                      matInput
+                                      [matAutocomplete]="auto"
+                                      [(ngModel)]="objLang.contentVals[net_income_element.name]">
+                            <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                            <mat-autocomplete  #auto="matAutocomplete">
+                                <mat-option [value]="net_reduction_option" *ngFor="let net_reduction_option of objLang.net_reduction_options">{{net_reduction_option}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div  fxLayout="row wrap" fxLayoutAlign="center top">
+                        <button mat-icon-button class="content-icon-add" (click)="addNetIncome()">
+                          <mat-icon matSuffix [icIcon]="icAdd"></mat-icon>
+                        </button>
+                        <button *ngIf="objLang.contentVals['net_to'] > 1" mat-icon-button color="warn" class="content-icon-remove" (click)="reduceNetIncome()">
+                          <mat-icon [icIcon]="icRemove"></mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                </div>
+              </mat-card>
+            </div>
+          </mat-tab>
+      
+          <mat-tab label="Special">
+            <div class="content p-6">
+              <mat-card *ngFor="let contentHeader of contentHeadersSpecial"  class="mb-4">
+                <div fxLayout='row wrap' fxLayoutAlign="start start" class="row" class="content-title-bar">
+                  <div class="title mb-3">{{objLang.translates['contentcontent'+contentHeader.name]}}</div>
+                  <button mat-icon-button
+                      matTooltipPosition="after" [matTooltip]="objLang.translates['contentcontent'+contentHeader.name+'_tip']"
+                      aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                      <mat-icon [icIcon]="icInfo"></mat-icon>
+                  </button>
+                </div> 
+                <!-- Address -->
+                <div  *ngIf="contentHeader.name == 'address'" fxLayout='row wrap' class="row">
+                  <div fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let address_element of address_elements">
+                    <mat-form-field appearance="legacy" *ngIf="address_element.name == 'address_scope'">
+                      <mat-label>{{objLang.translates['contentcontent'+address_element.name]}}</mat-label>
+                      <mat-select [(ngModel)]="objLang.contentVals[address_element.name]" (selectionChange)="onChange()">
+                          <mat-option [value]="address_option.name" *ngFor="let address_option of address_options">{{objLang.translates['contentcontent'+address_option.name]}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <form [formGroup]="countryForm" *ngIf="(address_element.name == 'country_id') && (objLang.contentVals['address_scope'] == address_options[1].name)">
+                      <mat-form-field appearance="legacy">
+                        <mat-label>{{objLang.translates['contentcontent'+address_element.name]}}</mat-label>
+                        <mat-select
+                          [(ngModel)]="objLang.contentVals['country_id']"
+                          [multiple]='true'
+                          formControlName="selected">
+                          <mat-option [value]="country_option.id" *ngFor="let country_option of country_options">{{country_option.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </form>
+                  </div>
+                </div>
+                <!-- Guarantor Group -->
+                <div *ngIf="contentHeader.category == 'content_guarantors'" fxLayout='row wrap' class="row">
+                  <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20" class="column"  *ngFor="let usual_element of guarantor_group[contentHeader.name]['usuals']; let i=index"> 
+                    <div>{{objLang.contentVals['usual_element.name']}}</div>
+                    <mat-form-field appearance="legacy" *ngIf="i==0">
+                      <mat-label>{{objLang.translates['contentcontent'+usual_element.name]}}</mat-label>
+                      <mat-select 
+                      [(ngModel)]="objLang.contentVals[usual_element.name]">
+                          <mat-option [value]="guarantor_option.key" *ngFor="let guarantor_option of guarantor_self_options">{{guarantor_option.val}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="legacy" *ngIf="(i==1) && (objLang.contentVals[guarantor_group[contentHeader.name]['usuals'][0].name] == true)">
+                      <mat-label>{{objLang.translates['contentcontent'+usual_element.name]}}</mat-label>
+                      <input type="number"
+                      step="{{contentSteps[usual_element.name]}}" 
+                      (input)="countDecimals(usual_element.name)"
+                      aria-label="Number"
+                      matInput
+                      [matAutocomplete]="auto"
+                      [(ngModel)]="objLang.contentVals[usual_element.name]">
+                      <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                      <mat-autocomplete  #auto="matAutocomplete">
+                          <mat-option [value]="guarantor_option" *ngFor="let guarantor_option of guarantor_min_options">{{guarantor_option}}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" class="content-grid-tile">
+                    <div fxLayout="row wrap">
+                      <div fxFlex="50" class="column">                       
+                          <mat-form-field appearance="legacy" *ngFor="let until_element of guarantor_group[contentHeader.name]['untils_available']; let i=index">
+                            <mat-label>{{objLang.translates['contentcontent'+'until']}}</mat-label>
+                            <input type="number"
+                            step="{{contentSteps[until_element.name]}}" 
+                            (input)="countDecimals(until_element.name)"
+                            aria-label="Number"
+                            matInput
+                            [matAutocomplete]="auto"
+                            [(ngModel)]="objLang.contentVals[until_element.name]">
+                            <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                            <mat-autocomplete  #auto="matAutocomplete">
+                                <mat-option [value]="guarantor_option" *ngFor="let guarantor_option of guarantor_until_options">{{guarantor_option}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                      </div>
+                      <div fxlayout="column" fxFlex="50" class="column">                       
+                        <mat-form-field appearance="legacy" *ngFor="let reduction_element of guarantor_group[contentHeader.name]['reductions_available']; let i=index">
+                          <mat-label>{{objLang.translates['contentcontent'+'reduction']}}</mat-label>
+                          <input type="text"
+                          step="{{contentSteps[reduction_element.name]}}" 
+                          (input)="countDecimals(reduction_element.name)"
+                          aria-label="Number"
+                          matInput
+                          [matAutocomplete]="auto"
+                          [(ngModel)]="objLang.contentVals[reduction_element.name]">
+                          <mat-icon matSuffix [icIcon]="icKeyboardArrowDown"></mat-icon>
+                          <mat-autocomplete  #auto="matAutocomplete">
+                              <mat-option [value]="guarantor_option" *ngFor="let guarantor_option of objLang.guarantor_reduction_options">{{guarantor_option}}</mat-option>
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div  fxLayout="row wrap" fxLayoutAlign="center top">
+                      <button mat-icon-button color="primary" class="content-icon-add" (click)="addGuarantors(contentHeader.name)">
+                        <mat-icon matSuffix [icIcon]="icAdd"></mat-icon>
+                      </button>
+                      <button *ngIf="this.guarantor_group[contentHeader.name]['reduction_to'] > 1" mat-icon-button color="warn" class="content-icon-remove" (click)="reduceGuarantors(contentHeader.name)">
+                        <mat-icon [icIcon]="icRemove"></mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+              
+            </div>
+          </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</vex-page-layout>

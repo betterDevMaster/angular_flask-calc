@@ -1,0 +1,13 @@
+<vex-page-layout class="w-full px-gutter container">
+  <!-- <vex-secondary-toolbar current="Content Provider">
+    <vex-breadcrumbs [crumbs]="['Content Provider']" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar> -->
+
+  <div vexContainer>
+    <!-- CONTENT -->
+    <div id="overlay" *ngIf="!objAuth.user">
+        <mat-spinner class="waiting-spinner"></mat-spinner>
+    </div>
+    <app-content-detail [user]="objAuth.user" *ngIf="objAuth.user"></app-content-detail>
+  </div>
+</vex-page-layout>

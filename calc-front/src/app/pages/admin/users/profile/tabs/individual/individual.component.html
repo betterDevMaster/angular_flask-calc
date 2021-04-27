@@ -1,0 +1,26 @@
+
+<div class="content">
+    <mat-tab-group dynamicHeight="true">
+        <mat-tab label="Basis data" isActive="true">
+            <app-basis-detail [user]="user"></app-basis-detail>
+        </mat-tab>
+        <mat-tab label="Individual data">
+            <app-individual-detail [user]="user"></app-individual-detail>
+        </mat-tab>
+        <mat-tab label="Special data">
+            <app-special-detail [user]="user"></app-special-detail>
+        </mat-tab>
+        <mat-tab label="Household bill">
+            <app-household-detail [user]="user"></app-household-detail>
+        </mat-tab>
+        <mat-tab label="Livingspace">
+            <app-livingspace-detail [user]="user"></app-livingspace-detail>
+        </mat-tab>
+        <mat-tab label="Project cost">
+            <app-projectcost-detail [user]="user"></app-projectcost-detail>
+        </mat-tab>
+        <mat-tab label="Documents">
+            <app-document-detail [user]="user"></app-document-detail>
+        </mat-tab>
+    </mat-tab-group>
+</div>

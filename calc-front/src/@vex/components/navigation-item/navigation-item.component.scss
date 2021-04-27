@@ -1,0 +1,91 @@
+.navigation-item {
+  @apply rounded cursor-pointer text-sm font-medium px-4 py-2 relative select-none no-underline block;
+  margin-inline-end: var(--padding-8);
+  transition: var(--trans-ease-out);
+}
+
+.navigation-color {
+  color: var(--navigation-color);
+}
+
+.navigation-menu-item {
+  transition: var(--trans-ease-out);
+
+  &:hover {
+    @apply text-primary-500;
+
+    .mat-icon {
+      @apply text-primary-500;
+    }
+  }
+
+  .mat-icon {
+    transition: var(--trans-ease-out);
+  }
+}
+
+
+
+
+@media (min-width: 576px) {
+  button.mat-menu-item {
+  width: 100%;
+  // height: 5rem;
+  float: left;
+ }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+  button.mat-menu-item {
+  width: 33%;
+  // height: 5rem;
+  float: left;
+ }
+}
+
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+  button.mat-menu-item {
+  width: 33.333%;
+  height: 5rem;
+  float: left;
+ }
+}
+/* very large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+  button.mat-menu-item {
+  width: 33%!important;
+  height: 5rem;
+  float: left;
+ }
+}
+/* Extra large devices (large desktops, 1550px and up)*/
+@media (min-width: 1550px) {
+  button.mat-menu-item {
+  width: 33%!important;
+  height: 5rem;
+  float: left;
+ }
+}
+
+::ng-deep .mat-menu-panel {
+  min-width: 112px;
+  max-width: 482px!important;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 48px);
+  border-radius: 4px;
+  outline: 0;
+  min-height: 64px;
+}
+
+.title_msg {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.status_msg {
+  font-size: 12px;
+  margin-left: 29px;
+}

@@ -1,0 +1,281 @@
+
+<ng-container *ngIf="objBack.individualStatus">
+  <mat-card class="max-w-full mt-6 p-8">
+    <!-- martial status and kids -->
+    <div class="flex-container heading-1 row-calc-end">
+      <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">Martial status and number of kids</div>
+      <!-- Inputs -->
+      <ng-container *ngFor="let header of contentHeaders">
+        <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngIf="header.name == 'martial_status' || header.name == 'kids'" >
+          <!-- Label -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60" fxFlexAlign="center" class="column">
+            <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                {{objLang.translates['contentcontent'+header.name]}}
+                <button matPrefix mat-icon-button
+                    matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_'+header.name]"
+                    aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                    <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base "></mat-icon>
+                </button>
+            </div>
+          </div>
+          <!-- Input or dropdown -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs">
+            <mat-form-field appearance="outline" fxFlexLayout="start end">
+              <mat-select *ngIf="options[header.name].length>0" [(ngModel)] = "individualInputs[header.name][0]">
+                <mat-option [value]="option.name" *ngFor="let option of options[header.name]">{{objLang.translates['contentcontent'+option.name]}}</mat-option>
+              </mat-select>
+              <input matInput type="number" *ngIf="options[header.name].length == 0" [(ngModel)] = "individualInputs[header.name][0]" >
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <!-- Other inputs that have person 1 and person 2 -->
+    <div class="flex-container heading-1 pt-8 row-calc-end">
+      <div fxLayout="row" class="row pb-3 sm:pb-4">
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60" fxFlexAlign="center" class="column font-medium text-sm sm:text-xl">
+          Personal details
+        </div>
+        <ng-container *ngIf="individualInputs['martial_status'][0] != 'martial_single'">
+          <div fxLayout="column" class="column" fxFlex="20" fxFlexAlign="center" fxHide fxShow.gt-sm>
+              {{objLang.translates['individualindividualperson']}} 1
+          </div>
+          <div fxLayout="column" class="column" fxFlex="20"  fxFlexAlign="center" fxHide fxShow.gt-sm>
+            {{objLang.translates['individualindividualperson']}} 2
+          </div>
+        </ng-container>
+      </div>
+      <!-- Inputs -->
+      <ng-container *ngFor="let header of contentHeaders">
+        <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngIf="header.name != 'martial_status' && header.name != 'kids'">
+          <!-- Label -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60" fxFlexAlign="center" class="column">
+            <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                {{objLang.translates['contentcontent'+header.name]}}
+                <button matPrefix mat-icon-button
+                    matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_'+header.name]"
+                    aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                    <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base "></mat-icon>
+                </button>
+            </div>
+          </div>
+          <!-- Person 1 -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs sm:pr-0 pb-2 sm:pb-0" >
+            <div fxShow fxHide.gt-sm>Person 1</div>
+            <mat-form-field appearance="outline" fxFlexLayout="start end">
+              <mat-select *ngIf="options[header.name].length>0" [(ngModel)] = "individualInputs[header.name][0]">
+                <mat-option [value]="option.name" *ngFor="let option of options[header.name]">{{objLang.translates['contentcontent'+option.name]}}</mat-option>
+              </mat-select>
+              <input matInput type="number" *ngIf="options[header.name].length == 0" [(ngModel)] = "individualInputs[header.name][0]" >
+            </mat-form-field>
+          </div>
+          <!-- Person 2 -->
+          <div fxLayout="column" class="column text-xs sm:pr-0 pb-2 sm:pb-0" fxFlex="100" fxFlex.gt-sm="20" fxFlexAlign="center" *ngIf="individualInputs['martial_status'][0] != 'martial_single' && header.name != 'martial_status' && header.name != 'kids'">
+            <div fxShow fxHide.gt-sm>Person 2</div>
+            <mat-form-field appearance="outline" >
+              <mat-select *ngIf="options[header.name].length>0" [(ngModel)] = "individualInputs[header.name][1]">
+                <mat-option [value]="option.name" *ngFor="let option of options[header.name]">{{option.val}}</mat-option>
+              </mat-select>
+              <input matInput type="number" *ngIf="options[header.name].length == 0" [(ngModel)] = "individualInputs[header.name][1]">
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <!-- Own funds and guarantor -->
+    <div class="flex-container heading-2 pt-8 row-calc-end">
+      <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">Own funds and guarantor</div>
+      <!-- Own funds -->
+      <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="start center">
+        <!-- label for own funds -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column">
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+            <div>{{objLang.translates['individualindividualown_funds']}}</div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_own_funds']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+              <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base "></mat-icon>
+            </button>
+          </div>
+        </div>
+        <!-- dropdown for own funds -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs">
+          <mat-form-field appearance="outline" >
+            <mat-select [(ngModel)]="individualInputs['own_funds']['accepted']">
+              <mat-option *ngFor="let guarantorOption of guarantorOptions" [value]="guarantorOption.value">
+                {{objLang.translates['individualindividual'+guarantorOption.name]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Sum own funds -->
+      <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="start center" *ngIf="individualInputs['own_funds']['accepted']">
+        <!-- label for sum own funds -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column">
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+            <div>
+              {{objLang.translates['individualindividualsum_own_funds']}}
+            </div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_sum_own_funds']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                <mat-icon [icIcon]="icInfo" class="text-primary-500" size="20px"></mat-icon>
+            </button>
+          </div>
+        </div>
+        <!-- input for sum own funds -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs" *ngIf="individualInputs['own_funds']['accepted']">
+          <mat-form-field appearance="outline">
+          <input matInput type="number" [(ngModel)]="individualInputs['own_funds']['sum']"> 
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Guarantor -->
+      <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="start center">
+      <!-- <div fxLayout="row wrap" class="row"> -->
+        <!-- <div fxLayout="column" class="column body-2" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center"> -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column">
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+            <div>{{objLang.translates['individualindividualguarantor']}}</div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_guarantor']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base"></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div fxLayout="column" class="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center">
+          <mat-form-field appearance="outline" >
+            <mat-select [(ngModel)]="individualInputs['guarantor']['accepted']">
+              <mat-option *ngFor="let guarantorOption of guarantorOptions" [value]="guarantorOption.value">
+                {{objLang.translates['individualindividual'+guarantorOption.name]}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Sum guarantor -->
+      <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="start center" *ngIf="individualInputs['guarantor']['accepted']">
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column">
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+            <div>{{objLang.translates['individualindividualsum_guarantor']}}</div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_sum_guarantor']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base"></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs" *ngIf="individualInputs['guarantor']['accepted']">
+          <mat-form-field appearance="outline">
+          <input type="number" matInput [(ngModel)]="individualInputs['guarantor']['sum']"> 
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <!-- Checkout Button -->
+    <div fxLayout="row" fxLayoutAlign="center center" class="mt-6 mb-3">
+      <button fxLayout="column" fxLayoutAlign="center center" fxFlex.gt-sm="20" fxFlex="80" mat-raised-button color="primary" (click)="calcIndividual()" class="ml-2 mr-2">
+        {{objLang.translates['individualindividualcheck_potential']}}
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- result -->
+  <mat-card class="max-w-full mt-6 mb-6 p-8" id="personal_result" [style.visibility]="isResult ? 'visible' : 'hidden'">
+    <!-- heading -->
+    <div fxLayout="row"  class="pb-3 font-medium text-sm sm:text-xl sm:pb-4" fxLayoutAlign="start center">
+        <div>{{objLang.translates['individualindividualresult']}}</div>
+        <button matPrefix mat-icon-button
+            matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_result']"
+            aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+            <mat-icon [icIcon]="icInfo" class="text-primary-500 text-base"></mat-icon>
+        </button>
+    </div>
+    <!-- results with circle progress -->
+    <div fxLayout="row wrap" class="border-solid border-r border-t border-gray-400 mb-6">
+      <!-- general criteria -->
+      <div fxLayout="column" fxFlex="100" fxLayoutAlign="center center" fxFlex.gt-sm="calc(50%-1px)" class="border-solid border-l border-b border-gray-400 p-4">
+          <!-- label -->
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs sm:text-xl">
+            <div>{{objLang.translates['individualindividualgeneral_criteria']}}</div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_general_criteria']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base"></mat-icon>
+            </button>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <circle-progress
+              [maxPercent]="100"
+              [radius]="60"
+              [showInnerStroke]="false"
+              [showSubtitle] = "false"
+              [outerStrokeWidth]="10"
+              [innerStrokeWidth]="0"
+              [backgroundPadding]="-10"
+              [backgroundStrokeWidth]="0"
+              [backgroundColor]="'#ffffff'"
+              [backgroundGradientStopColor]="'#c0c0c0'"
+              [backgroundGradient]="true"
+              [subtitleColor]="'#444444'"
+              [startFromZero]="false"
+              [responsive]="true"
+              [options]="generalResult[generalMsg]"
+            ></circle-progress>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" class="">
+              <div [style.color]="isResult?generalResult[generalMsg].outerStrokeColor:''">{{objLang.translates['individualindividual'+this.generalMsg]}}</div>
+          </div>
+      </div>
+      <!-- attractiveness -->
+      <div *ngIf="attractiveMsg != ''" fxLayout="column" fxFlex="100" fxLayoutAlign="center center" fxFlex.gt-sm="calc(50%-1px)" class="border-solid border-l border-b border-gray-400 p-4">
+          <!-- label -->
+          <div fxLayout="row" fxLayoutAlign="start center" class="text-xs sm:text-xl">
+            <div>{{objLang.translates['individualindividualattractiveness']}}</div>
+            <button matPrefix mat-icon-button
+              matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_attractiveness']"
+              aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base"></mat-icon>
+            </button>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <circle-progress
+              [maxPercent]="100"
+              [radius]="60"
+              [showInnerStroke]="false"
+              [showSubtitle] = "false"
+              [outerStrokeWidth]="10"
+              [innerStrokeWidth]="0"
+              [backgroundPadding]="-10"
+              [backgroundStrokeWidth]="0"
+              [backgroundColor]="'#ffffff'"
+              [backgroundGradientStopColor]="'#c0c0c0'"
+              [backgroundGradient]="true"
+              [subtitleColor]="'#444444'"
+              [startFromZero]="false"
+              [responsive]="true"
+              [options]="attractiveResult[attractiveMsg]"
+            ></circle-progress>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" class="">
+            <div [style.color]="isResult?attractiveResult[attractiveMsg].outerStrokeColor:''">{{objLang.translates['individualindividual'+this.attractiveMsg]}}</div>
+          </div>
+      </div>
+    </div>
+
+    <div *ngIf="!objAuth.isLoggedIn">
+      <div fxLayout="row" class="analyse-btn" fxLayoutAlign="end center">
+        <div class="mat-h4">{{objLang.translates['individualindividualinfotext_like']}}</div>
+      </div>
+      <div fxLayout="row" class="analyse-btn" fxLayoutAlign="end center">
+        <a mat-raised-button color="primary" href="/login">{{objLang.translates['commonloginlogin']}}</a>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end center"class="pt-6" *ngIf="objAuth.isLoggedIn && objAuth.user['user_role'] != 'admin'">
+      <button mat-raised-button color="primary" class="content-next-btn" [disabled]="!isResult" (click)="objAuth.goPage('/individual/household')" >Go to Household bill</button>
+    </div>
+  </mat-card>
+</ng-container>
+  

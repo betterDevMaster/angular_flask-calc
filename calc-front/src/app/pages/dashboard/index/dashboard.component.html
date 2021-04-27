@@ -1,0 +1,104 @@
+<vex-page-layout class="w-full px-gutter container">
+
+    <h1 class="display-1 mb-2 pt-9" fxLayout="row" fxLayoutAlign="start center">
+        <span @scaleIn
+            [style.background-color]="theme.colors.primary['500'] | colorFade:0.9"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-primary-500 ltr:mr-4 rtl:ml-4 flex items-center justify-center">
+        <ic-icon [icon]="icCalc" class="text-xl sm:text:2xl"></ic-icon>
+        </span>
+        <!-- <span @fadeInRight class="block text-2xl sm:text-3xl">{{objLang.translates['commonmenudashboard']}}</span> -->
+        <span @fadeInRight class="block text-2xl sm:text-3xl">{{objLang.translates['commonmenudashboard']}}</span>
+    </h1>
+
+
+
+
+    <div vexContainer class="container">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div class="message_card" fxLayout.lt-md="column"   fxFlex.lt-md="100">
+                <button mat-raised-button color="primary"  routerLink="/loan-menu/index">{{objLang.translates['individualdashboardnew_loan_application']}}</button>
+            </div>
+            <div class="message_card" fxLayout.lt-md="column"  fxFlex.lt-md="100">
+                <mat-card>
+                    <mat-card-content>
+                        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                            <h4>{{objLang.translates['individualdashboardmessages']}}</h4>
+                            <!-- <div>
+                                <button mat-raised-button color="primary">Create Document</button>&nbsp;
+                                <button mat-raised-button color="primary">Settings</button>
+                            </div> -->
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <p class="message_txt">{{objLang.translates['individualdashboardintroduction']}}: {{objLang.translates['individualdashboardwelcome']}}</p>
+                            <p class="message_txt">{{objLang.translates['individualdashboardadvisor']}}: Consultation protocol 01.01.2021</p>
+                            <p class="message_txt">{{objLang.translates['individualdashboardloan']}}: {{objLang.translates['individualdashboardapplication_uploaded']}}</p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="example-container" style="margin-top:15px">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{objLang.translates['individualdashboardloan_name']}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.name}}
+                    </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.id}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="start">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{objLang.translates['individualdashboardstart']}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.start}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="end">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{objLang.translates['individualdashboardend']}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.end}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{objLang.translates['individualdashboardloan_amount']}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.amount}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="state">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{objLang.translates['individualdashboardstate']}}</mat-header-cell>
+                    <mat-cell *matCellDef="let row let i=index;">
+                        {{row.state}}
+                    </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;">
+                        <button routerLink="/loan/details"  mat-icon-button color="primary" >
+                            <mat-icon [icIcon]="icOpen"></mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 20, 30, 50, 100]"></mat-paginator>
+        </div>
+
+    </div>
+
+</vex-page-layout>

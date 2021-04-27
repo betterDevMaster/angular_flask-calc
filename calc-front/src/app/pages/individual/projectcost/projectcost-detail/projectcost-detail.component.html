@@ -1,0 +1,90 @@
+<ng-container *ngIf="!isProcessing">
+  <div fxFlex fxLayout="row wrap" class="row">
+    <!-- Inputs -->
+    <div fxLayout="column" class="column" fxFlex="100" fxFlex.gt-sm="60">
+      <mat-card class="max-w-full household-inputs-card mt-6 p-0 h-80 sm:relative sm:overflow-hidden">
+          <mat-card-content class="pr-8 pl-8 pb-8 w-full">
+            <div class="flex-container heading-1 row-calc-end pt-8"  *ngFor="let projectHeading of projectHeadings;let i=index;">
+              <div fxLayout="row" fxLayoutAlign="start center" class="row pb-3 sm:pb-1" *ngIf="projectHeading.name != 'ground'">
+                <div fxLayout="column" fxFlex="100" fxFlexAlign="center" class="column font-medium text-sm sm:text-xl sm:pb-3">
+                  {{objLang.translates['individualproject_cost'+projectHeading.name]}}
+                </div>
+              </div>
+              <ng-container *ngFor="let projectInput of projectInputs[projectHeading.name]">
+                <div fxLayout="row wrap" class="{{projectHeading.name !='ground'?'row-calc':''}} pt-2 pb-2 {{projectHeading.name == 'housebuilding' && projectInput.level == 2?'bg-primary-50':''}}" fxLayoutAlign="space-between center" >
+                  <!-- Label -->
+                  <div fxLayout="column" fxFlex="100" fxFlex="66.666" fxFlexAlign="center" class="column sm:pl-2">
+                    <div fxLayout="row" fxLayoutAlign="start center" class="{{projectHeading.name =='ground'?'font-medium text-sm sm:text-xlfont-medium text-sm sm:text-xl':'text-xs font-bold sm:text-sm sm:font-normal'}}">
+                      <ng-container *ngIf="projectHeading.name == 'housebuilding'">
+                        <div *ngIf="projectInput.level==2" class="sm:pl-6">
+                          {{objLang.translates['individualproject_cost'+projectInput.name]}}
+                        </div>
+                        <div *ngIf="projectInput.level==1" class="{{projectInput.name == 'turnkey_ready'?'font-bold text-base':''}}">
+                          {{objLang.translates['individualproject_cost'+projectInput.name]}}
+                        </div>
+                      </ng-container>
+                      <div *ngIf="projectHeading.name != 'housebuilding'">
+                        {{objLang.translates['individualproject_cost'+projectInput.name]}}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Input -->
+                  <div fxLayout="column" fxFlex="100" fxFlex="33.333"  fxFlexAlign="center" class="column text-xs">
+                    <mat-form-field appearance="outline" class="bg-white">
+                      <input matInput type="number" *ngIf="projectInput.name == 'turnkey_ready'" [(ngModel)]="projectHeadings[0].costs"  (input) = "changeTurnkey($event.target.value)"/>
+                      <input matInput type="number" *ngIf="projectInput.name != 'turnkey_ready'" [(ngModel)]="projectInput.val"  (input) = "calSum()"/>
+                      <span matSuffix>{{user.fx}}</span>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- Outputs -->
+    <div fxLayout="column" class="column" fxFlex="100" fxFlex.gt-sm="40">
+      <mat-card class="max-w-full mt-6 p-8">
+        <div *ngIf="isCalculating" class="cal-spinner">
+          <app-spinners [loaderFor]="''"></app-spinners>
+        </div>
+        <div class="flex-container heading-1 row-result-end">
+          <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">
+            Summary
+          </div>
+          <!-- result for headings -->
+          <ng-container *ngFor="let projectHeading of projectHeadings">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngIf="projectHeading.name == 'exterior' || projectHeading.name == 'independent'">
+              <!-- Label -->
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" fxFlexAlign="center" class="column text-xs sm:text-sm">
+                {{projectHeading.title}} costs
+              </div>
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60"  fxFlexAlign="center" class="column text-sm font-extrabold sm:text-2xl">
+                <div fxLayout="row wrap" fxLayoutAlign="end center">
+                  {{user.fx}}{{projectHeading.costs==null?0:projectHeading.costs}}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- result total -->
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngFor="let projectOutput of projectOutputs">
+            <!-- Label -->
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" fxFlexAlign="center" class="column text-xs sm:text-sm">
+              {{objLang.translates['individualproject_cost'+projectOutput.name]}}
+            </div>
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60"  fxFlexAlign="center" class="column text-sm font-extrabold sm:text-2xl">
+              <div fxLayout="row wrap" fxLayoutAlign="end center">
+                {{user.fx}}{{projectOutput.val}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Buttons -->
+        <div fxLayout="row" fxLayoutAlign="end center" class="pt-6" *ngIf="objAuth.user['user_role'] != 'admin'">
+          <button mat-raised-button color="primary" [ngClass]="['bg-green-500', 'text-contrast-white']" (click)="saveInputs()" class="content-next-btn ml-2 mr-2">{{objLang.translates['commongeneralsave']}}</button>
+          <button mat-raised-button color="primary" (click)="objAuth.goPage('/individual/documents')" class="next_btn">Go to Documents</button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</ng-container>

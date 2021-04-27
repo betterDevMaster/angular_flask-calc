@@ -1,0 +1,129 @@
+
+<div fxLayout="row wrap" class="row" *ngIf="isResult">
+  <!-- Inputs -->
+  <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60" class="column">
+    <mat-card class="max-w-full household-inputs-card mt-6 p-0 h-80 sm:relative sm:overflow-hidden">
+      <mat-card-content class="pr-8 pl-8 pb-8 w-full">
+        <div class="flex-container heading-1 pt-8" *ngFor="let rooms of livingspaceInputs; let i=index">
+          <div fxLayout="row" fxLayoutAlign="start center" class="pb-3 sm:pb-1">
+            <!-- Floor heading -->
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="font-medium text-sm sm:text-xl sm:pb-3">{{objLang.translates['individuallivingspacefloor']}} {{i+1}}</div>
+            <!-- Add or Remove buttons -->
+            <div fxLayout="column" fxFlex="20" *ngIf="i+1==livingspaceInputs.length">
+              <div fxLayout="row" fxLayoutAlign="end center ">
+                <button mat-icon-button color="primary" class="add-floor-btn mr-2" (click)="addFloor()">
+                  <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+                <button mat-icon-button color="accent" class="remove-floor-btn" *ngIf="livingspaceInputs.length > 1" (click)="reduceFloor()">
+                  <mat-icon [icIcon]="icRemove"></mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngFor="let room of rooms; let j=index">
+            <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngIf="room.single">
+              <!-- Label of rooms -->
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="66.666" fxFlexAlign="center" class="column">
+                <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                  {{objLang.translates['individuallivingspace'+room.name]}}
+                </div>
+              </div>
+              <!-- Input for rooms -->
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333"  fxFlexAlign="center" class="column text-xs">
+                <mat-form-field appearance='outline'>
+                  <input matInput type="number" [(ngModel)]="room.val" (input) = "inputChanged()"/>
+                  <span matSuffix>m<sup>2</sup></span>
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-container *ngIf="!room.single">
+              <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngFor="let multiroom_val of room.val; let k=index; trackBy:trackByFn">
+                <!-- Label -->
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="66.666" fxFlexLayoutAlign="start center" class="column">
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <div fxLayout="column">
+                      {{k==0?objLang.translates['individuallivingspace'+room.name]:objLang.translates['individuallivingspace'+room.name] + " " + (k+1)}}
+                    </div>
+                    <div fxLayout="column" *ngIf="k+1==room.val.length">
+                      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                        <button mat-icon-button color="primary" class="mr-2" (click)="addRoom(i, j)">
+                          <mat-icon [icIcon]="icAdd"></mat-icon>
+                        </button>
+                        <button mat-icon-button color="accent" class="remove-room-btn" *ngIf="room.val.length > 1" (click)="reduceRoom(i, j)">
+                          <mat-icon [icIcon]="icRemove"></mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333"  fxFlexAlign="center" class="column text-xs">
+                  <mat-form-field appearance='outline' class="brett-{{k}}">
+                    <input matInput type="number" [(ngModel)]="room.val[k]" (input) = "inputChanged()"/>
+                    <span matSuffix>m<sup>2</sup></span>
+                  </mat-form-field>   
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <!-- Sum floor  -->
+          <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center">
+            <!-- Label -->
+            <div fxLayout="column" class="column" fxFlex="66.666">
+              <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-bold">
+                Sum Floor {{i+1}}
+              </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333"  fxFlexAlign="center" class="column text-lg font-bold">
+              <div fxLayout="row" fxLayoutAlign="end center">
+                {{floor_sums[i]}}<span>m<sup>2</sup></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!-- Results -->
+  <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" class="column">
+    <mat-card class="max-w-full mt-6 p-8">
+      <div *ngIf="isCalculating" class="cal-spinner">
+        <app-spinners [loaderFor]="''"></app-spinners>
+      </div>
+      <div class="flex-container heading-1 row-calc-end">
+        <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">Summary</div>
+        <!-- Sum floors -->
+        <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center">
+          <!-- Label -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" fxFlexAlign="center" class="column text-xs sm:text-sm">
+            Sum floors
+          </div>
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60"  fxFlexAlign="center" class="column text-sm font-extrabold sm:text-2xl">
+            <div fxLayout="row wrap" fxLayoutAlign="end center">
+              {{floor_sums_total}}
+              <span>m<sup>2</sup></span>
+            </div>
+          </div>
+        </div>
+        <!-- Sum living -->
+        <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center">
+          <!-- Label -->
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" fxFlexAlign="center" class="column text-xs sm:text-sm">
+            Sum living#
+          </div>
+          <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60"  fxFlexAlign="center" class="column text-sm font-extrabold sm:text-2xl">
+            <div fxLayout="row wrap" fxLayoutAlign="end center">
+              {{floor_rooms}}
+              <span>m<sup>2</sup></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center" class="pt-6" *ngIf="objAuth.user['user_role'] != 'admin'">
+        <button mat-raised-button color="primary" [ngClass]="['bg-green-500', 'text-contrast-white']" (click)="saveInputs()" class="ml-2 mr-2">{{objLang.translates['commongeneralsave']}}</button>
+        <button mat-raised-button color="primary" (click)="objAuth.goPage('/individual/projectcost')" class="next_btn">Go to Project costs
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

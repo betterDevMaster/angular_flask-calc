@@ -1,0 +1,141 @@
+<h1 mat-dialog-title>{{data[0]}}</h1>
+<div mat-dialog-content>
+  <form name="countryForm" [formGroup]="countryForm">
+    <div fxLayout="row wrap" class="row">
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Country ID</mat-label>
+          <input matInput formControlName="id" [readonly]="true" type="number">
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="name" type="text">
+          <mat-error *ngIf="countryForm.get('name').hasError('required')">
+              Country is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Currency</mat-label>
+          <input matInput formControlName="currency" type="text">
+          <mat-error *ngIf="countryForm.get('currency').hasError('required')">
+              Currency is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>FX</mat-label>
+          <input matInput formControlName="fx" type="text">
+          <mat-error *ngIf="countryForm.get('fx').hasError('required')">
+            FX is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Land register</mat-label>
+          <input matInput formControlName="land_register" type="number" step={{countryDecimal.land_register}} (input)="onChangeEvent($event.target.value, 'land_register')">
+          <mat-error *ngIf="countryForm.get('land_register').hasError('required')">
+            Land register is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Right of lien</mat-label>
+          <input matInput formControlName="right_of_lien" type="number" step={{countryDecimal.right_of_lien}} (input)="onChangeEvent($event.target.value, 'right_of_lien')">
+          <mat-error *ngIf="countryForm.get('right_of_lien').hasError('required')">
+            Right of lien is requried
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Solvency</mat-label>
+          <input matInput formControlName="solvency" type="number" step={{countryDecimal.solvency}} (input)="onChangeEvent($event.target.value, 'solvency')">
+          <mat-error *ngIf="countryForm.get('solvency').hasError('required')">
+            Solvency is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Abstract</mat-label>
+          <input matInput formControlName="abstract_lr" type="number" step={{countryDecimal.abstract_lr}} (input)="onChangeEvent($event.target.value, 'abstract_lr')">
+          <mat-error *ngIf="countryForm.get('abstract_lr').hasError('required')">
+            Abstract is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Valuation</mat-label>
+          <input matInput formControlName="valuation_fee" type="number" step={{countryDecimal.valuation_fee}} (input)="onChangeEvent($event.target.value, 'valuation_fee')">
+          <mat-error *ngIf="countryForm.get('valuation_fee').hasError('required')">
+            Valuation is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Solvency rate</mat-label>
+          <input matInput formControlName="solvency_rate" type="number" step={{countryDecimal.solvency_rate}} (input)="onChangeEvent($event.target.value, 'solvency_rate')">
+          <mat-error *ngIf="countryForm.get('solvency_rate').hasError('required')">
+            Solvency rate is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Reference rate 1</mat-label>
+          <input matInput formControlName="reference_1" type="number" step={{countryDecimal.reference_1}} (input)="onChangeEvent($event.target.value, 'reference_1')">
+          <mat-error *ngIf="countryForm.get('reference_1').hasError('required')">
+            Reference rate 1 is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Reference rate 2</mat-label>
+          <input matInput formControlName="reference_2" type="number" step={{countryDecimal.reference_2}} (input)="onChangeEvent($event.target.value, 'reference_2')">
+          <mat-error *ngIf="countryForm.get('reference_2').hasError('required')">
+              Reference rate 2 is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Stamp duty</mat-label>
+          <input matInput formControlName="stamp_duty" type="number" step={{countryDecimal.stamp_duty}} (input)="onChangeEvent($event.target.value, 'stamp_duty')">
+          <mat-error *ngIf="countryForm.get('stamp_duty').hasError('required')">
+            Stamp duty is requried
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="50"  class="column">
+        <mat-form-field appearance="legacy">
+          <mat-label>Country costs</mat-label>
+          <input matInput formControlName="country_costs" type="number" step={{countryDecimal.country_costs}} (input)="onChangeEvent($event.target.value, 'country_costs')">
+          <mat-error *ngIf="countryForm.get('country_costs').hasError('required')">
+            Country costs is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <!-- <button mat-button mat-dialog-close [mat-dialog-close]="close" cdkFocusInitial [disabled]="countryForm.invalid">Save</button> -->
+  <button mat-button cdkFocusInitial [disabled]="countryForm.invalid || flagChanged" (click)="saveCountry()">Save</button>
+  <!-- <button mat-button mat-dialog-close [mat-dialog-close]="close" cdkFocusInitial>Close</button> -->
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="onNoClick()">Close</button>
+</div>
+
+
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

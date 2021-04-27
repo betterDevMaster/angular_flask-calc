@@ -1,0 +1,111 @@
+
+<mat-card class="max-w-full mt-6 p-8">
+    <div class="inputs pt-3">
+        <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">{{objLang.translates['individualbasisguide']}}</div>
+        <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="start center" *ngFor="let header of contentHeaders">
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column">
+                <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                    {{objLang.translates['contentcontent'+header.name]}}
+                    <button matPrefix mat-icon-button
+                        matTooltipPosition="after" [matTooltip]="objLang.translates['individualbasistip_'+header.name]"
+                        aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                        <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20"  fxFlexAlign="center" class="column text-xs">
+                <mat-form-field appearance="outline">
+                    <mat-select *ngIf="header['category'] != 'content_ranges'" [(ngModel)]="basisInputs[header.name]">
+                        <mat-option *ngFor="let option of elementsObj[header['name']]" [value]="option['name']">{{option['category'] == 'content_surcharges'? objLang.translates['contentcontentinterest_accepted_fixed']+' ' + option['val'] + ' years': option['val']}}</mat-option>
+                    </mat-select>
+                    <input matInput *ngIf="header['category'] == 'content_ranges'" [(ngModel)]="basisInputs[header.name]" />
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center" class="row-calc row-calc-end pt-2 pb-2">
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80" fxFlexAlign="center" class="column text-xs font-bold">
+                <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                    <div>{{objLang.translates['individualbasispreferred_date']}}</div>
+                    <button matPrefix mat-icon-button
+                        matTooltipPosition="after" [matTooltip]="objLang.translates['individualbasispreferred_date']"
+                        aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                        <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base "></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20" fxFlexAlign="center" class="column">
+                <mat-form-field appearance="outline">
+                    <input matInput (click)="formDatepickerRef.open()"
+                            (focus)="formDatepickerRef.open()"
+                            [matDatepicker]="formDatepickerRef"
+                            [(ngModel)]="basisInputs.preferred_date">
+                    <mat-datepicker-toggle [for]="formDatepickerRef" matSuffix></mat-datepicker-toggle>
+                    <!-- <mat-hint>Click on the input or the datepicker icon</mat-hint> -->
+                    <mat-datepicker #formDatepickerRef></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="mt-6 mb-3">
+            <button fxLayout="column" fxLayoutAlign="center center" fxFlex.gt-sm="20" fxFlex="80" mat-raised-button color="primary" (click)="calcBasis()" size="20px">{{objLang.translates['individualbasisanalysis']}}</button>
+        </div>
+    </div>
+</mat-card>
+
+<!-- Results -->
+<!-- <ng-container *ngIf="isResult">
+<ng-container *ngIf="isResult"> -->
+<mat-card class="max-w-full mt-6 mb-6 p-8" id="loan_result" [style.visibility]="isResult ? 'visible' : 'hidden'">
+    <div fxLayout="row"  class="pb-3 font-medium text-sm sm:text-xl sm:pb-4" fxLayoutAlign="start center">
+        <div>Your payment rate</div>
+        <button matPrefix mat-icon-button
+            matTooltipPosition="after" [matTooltip]="objLang.translates['individualbasistip_result']"
+            aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+            <mat-icon [icIcon]="icInfo" class="text-primary-500 text-base"></mat-icon>
+        </button>
+    </div>
+    <div>
+        <!-- 4 rates -->
+        <div fxLayout="row wrap" class="border-solid border-r border-t border-gray-400 mb-6">
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="calc(50%-1px)" class="border-solid border-l border-b border-gray-400" *ngFor="let name of resultNames">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxFlex="30" fxFlex.gt-sm="25" class="p-3">
+                        <img alt="{{name}}" src="assets/img/basis/{{name}}.jpg" class="w-full align-middle rounded-t-lg"/>
+                    </div>
+                    <div fxLayout="column" fxFlex="70" fxFlex.gt-sm="75" fxLayoutAlign="center start">
+                        <div fxLayout="row" fxLayoutAlign="start center" class="text-xs sm:text-xl">
+                            {{objLang.translates['individualbasis'+name]}}
+                            <button matPrefix mat-icon-button
+                                matTooltipPosition="after" [matTooltip]="objLang.translates['individualbasistip_'+name]"
+                                aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                                <mat-icon [icIcon]="icInfo" class="text-primary-500 text-base"></mat-icon>
+                            </button>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" class="text-sm font-extrabold sm:text-3xl">
+                            {{basisOutputs[name]['from']}} - {{basisOutputs[name]['to']}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Information -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" class="body-2" fxFlex="100" fxFlex.gt-sm="50" fxFlexAlign="center">
+                <div fxLayout="row" fxLayoutAlign="start center" class="pb-3 font-medium text-sm sm:text-xl sm:pb-3">
+                    About your payment rate
+                    <button matPrefix mat-icon-button
+                        matTooltipPosition="after" [matTooltip]="objLang.translates['individualbasistip_info']"
+                        aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                        <mat-icon [icIcon]="icInfo" class="text-primary-500 text-base"></mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="comment" fxLayout="row wrap">
+            <p *ngFor="let info of basisOutputs['info']" class="text-xs sm:text-sm">{{info}}</p>
+        </div>
+        <div fxLayout="row wrap" class="pt-6" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center"  *ngIf="objAuth.isLoggedIn&&objAuth.user['user_role'] != 'admin' || (isLocalInputs && !objAuth.isLoggedIn)">
+            <button mat-raised-button color="primary" fxFlex.gt-sm="20" fxFlex="80"  [disabled]="!isResult" (click) = "objAuth.goPage('/individual/individual')">{{objLang.translates['individualbasisanaysis_potential']}}</button>
+        </div>
+    </div>
+</mat-card>
+<!-- </ng-container> -->

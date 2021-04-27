@@ -1,0 +1,53 @@
+<div class="p-gutter container" vexContainer>
+  <div class="actions" fxLayout="row" fxLayoutAlign="end center">
+    <button mat-raised-button color="primary" class="mr-3" (click)="saveLangs()" [disabled]="!changedFlag">Save</button>
+    <button mat-raised-button color="primary" (click)="goBack()">Back</button>
+  </div>
+  <div id="overlay" *ngIf="isProcessing">
+      <mat-spinner class="waiting-spinner" [diameter]="50"></mat-spinner>
+  </div>
+  
+  <!-- General -->
+  <div class="pt-6">
+    <div class="title pb-3">General</div>
+    <div fxLayout="row wrap" class="row">
+      <div *ngFor="let contentMember of contentGroup['general']" fxLayout="column" fxFlex="100" fxFlex.gt-sm="20" class="column">
+        <mat-form-field appearance="legacy" fxFlex="100">
+            <mat-label>{{contentMember.val}}</mat-label>
+          <input matInput (input)="onChange()"  [(ngModel)]="contentLangs[contentMember.key]">
+        </mat-form-field>
+    </div>
+  </div>
+  <div class="pt-6" *ngFor="let contentHeader of contentHeadersMain; let i=index">
+    <div class="title pb-3">{{contentHeader.val}}</div>
+    <div fxLayout="row wrap" class="row">
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="20" class="column" *ngFor="let contentMember of contentGroup[contentHeader.name]">
+        <mat-form-field appearance="legacy" fxFlex="100" *ngIf="contentMember.val != 'Info'">
+          <mat-label>{{contentMember.val}}</mat-label>
+          <input matInput (input)="onChange()"  [(ngModel)]="contentLangs[contentMember.key]">
+        </mat-form-field>
+        <mat-form-field appearance="legacy" fxFlex="100" *ngIf="contentMember.val == 'Info'">
+          <mat-label>{{contentMember.val}}</mat-label>
+          <textarea matInput cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5" [(ngModel)]="contentLangs[contentMember.key]"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <!-- Tip -->
+  <div class="pt-6">
+    <div class="title pb-3">Tips</div>
+    <div fxLayout="row wrap" class="row">
+      <div *ngFor="let contentMember of contentGroup['tip']" fxLayout="column" fxFlex="100" fxFlex.gt-sm="50" class="column">
+        <mat-form-field appearance="legacy" fxFlex="100">
+          <mat-label>{{contentMember.val}}</mat-label>
+          <textarea matInput cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5" [(ngModel)]="contentLangs[contentMember.key]"></textarea>
+        </mat-form-field>
+    </div>
+  </div>
+</div>  

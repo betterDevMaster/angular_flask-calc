@@ -1,0 +1,100 @@
+<vex-page-layout class="w-full px-gutter container">
+  <vex-secondary-toolbar current="{{pageTitle}}">
+    <vex-breadcrumbs [crumbs]="['Languages', pageTitle]" fxFlex="auto"></vex-breadcrumbs>
+    <button class="ml-2" color="primary" mat-icon-button type="button" [matMenuTriggerFor]="settingsMenu">
+      <mat-icon [icIcon]="icMoreVert"></mat-icon>
+    </button>
+    <mat-menu #settingsMenu class="setting-menu px-gutter mt-1" (click)="$event.stopPropagation();">
+      <!-- Title Form -->
+      <div class="title-form" (click)="$event.stopPropagation();">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="setting-row">
+          <div class="title">Setting</div>
+          <button mat-icon-button color="primary" class="title-save-btn" [disabled]="!titleChangedFlag" (click)="saveLangTitle()"><mat-icon [icIcon]="icSave"></mat-icon></button>
+        </div>
+        <div fxLayout="row" class="row">
+          <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+              <div class="h2">ID</div>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+              <mat-form-field appearance="legacy" fxFlex="100">
+                  <input matInput [(ngModel)]="titleForm.id" [readonly]="true">
+              </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" class="row">
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+                <div class="h2">Name</div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+                <mat-form-field appearance="legacy" fxFlex="100">
+                    <input matInput [(ngModel)]="titleForm.name" (input)="onChange()">
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" class="row">
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+                <div class="h2">Foreign Name</div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+                <mat-form-field appearance="legacy" fxFlex="100">
+                    <input matInput [(ngModel)]="titleForm.foreign" (input)="onChange()">
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" class="row">
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+                <div class="h2">Flag</div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+                <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-select [formControl]="countryCtrl" class="flag-form" placeholder="Country Flag" [(value)]="titleForm.flag" (selectionChange)="onChange()">
+                        <mat-select-trigger>
+                            <div fxLayout="row" fxLayoutAlign="start center" class="p-1">
+                                <div fxLayout="column" fxLayoutAlign="center start"><img src="https://www.countryflags.io/{{titleForm.flag['iso2']|lowercase}}/shiny/32.png"></div>
+                                <div fxLayout="column" fxLayoutAlign="center start" class="pl-2">{{titleForm.flag['name']}}</div>
+                            </div>
+                        </mat-select-trigger>
+                        <mat-option>
+                            <ngx-mat-select-search 
+                            [formControl]="countryFilterCtrl"
+                            placeholderLabel="Search"
+                            [disableScrollToActiveOnOptionsChanged]="true"
+                            noEntriesFoundLabel="No entry matches"
+                            class="flag-filter"
+                            ></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let country of filteredCountries | async;let i=index" [value]="country">
+                            <div fxLayout="row" class="p-1">
+                                <div fxLayout="column" fxLayoutAlign="center start"><img src="https://www.countryflags.io/{{country['iso2']}}/shiny/32.png"></div>
+                                <div fxLayout="column" fxLayoutAlign="center start" class="pl-2">{{country.name}}</div>
+                            </div>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" class="pb-3">
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label ">
+                <div class="h2">Status</div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="status-column">
+                <mat-slide-toggle color="primary" [disabled]='titleForm.id==1?true:false' [(ngModel)]="titleForm.status" (change)="onChange()"></mat-slide-toggle>
+            </div>
+        </div>
+      </div>
+    </mat-menu>
+  </vex-secondary-toolbar>
+  <vex-page-layout-content class="vex-tabs p-0" vexContainer>
+    <mat-tab-group dynamicHeight="true">
+        <mat-tab label="Usual">
+            <app-general></app-general>
+        </mat-tab> 
+        <mat-tab label="Content Provider">
+            <app-content></app-content>
+        </mat-tab>
+        <mat-tab label="Individual">
+            <language-individual></language-individual>
+        </mat-tab>
+    </mat-tab-group>
+  </vex-page-layout-content>
+</vex-page-layout>

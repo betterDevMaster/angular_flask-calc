@@ -1,0 +1,122 @@
+<a *ngIf="isLink(item) && !isFunction(item.route)" [class.hover:bg-hover]="!(isActive$ | async)(item)"
+  [ngClass]="{ 'bg-primary-500 text-primary-contrast-500': (isActive$ | async)(item), 'navigation-color': !(isActive$ | async)(item) }"
+  (click)="objAuth.goPage(item.route)" class="navigation-item" matRipple>
+  {{ objLang.translates['commonmenu'+item.label] }}
+</a>
+
+<div (click)="item.route()" *ngIf="isLink(item) && isFunction(item.route)"
+  [class.hover:bg-hover]="!(isActive$ | async)(item)" class="navigation-item navigation-color" matRipple>
+  {{ objLang.translates['commonmenu'+item.label] }}
+</div>
+
+<ng-container *ngIf="(isSubheading(item) && item.children?.length > 0) || isDropdown(item)">
+  <div [class.hover:bg-hover]="!(isActive$ | async)(item)" [matMenuTriggerFor]="menu"
+    [ngClass]="{ 'bg-primary-500 text-primary-contrast-500': (isActive$ | async)(item), 'navigation-color': !(isActive$ | async)(item) }"
+    class="navigation-item my-full-width-menu" matRipple>
+    {{ objLang.translates['commonmenu'+item.label] }}
+  </div>
+
+  <mat-menu #menu="matMenu" style="background-color: red;">
+    <ng-container *ngFor="let child of item.children;let i=index">
+      <!-- <ng-container *ngIf="!item.isMega"> -->
+      <ng-container *ngIf="!item['isMega']">
+      <a *ngIf="(isLink(child) && !isFunction(child.route))"
+      (click)="objAuth.goPage(child.route)"
+      class="navigation-menu-item"
+      mat-menu-item>
+     <mat-icon [icIcon]="child.icon"></mat-icon>
+     <span>{{ objLang.translates['commonmenu'+child.label] }}</span>
+   </a>
+  </ng-container>
+  <!-- <ng-container *ngIf="item.isMega"> -->
+    <ng-container *ngIf="item['isMega']">
+      <!-- <div [Style.] -->
+      <div class="w-1/3 h-20 float-left" *ngIf="child.label == 'documents'"></div>
+      <button *ngIf="(isLink(child) && !isFunction(child.route))" (click)="objAuth.goPage(child.route)" [ngClass]="i>3?'mb-4':''" mat-menu-item>
+        <div style="display: flex; justify-content: start;">
+          <img style="height: 21px; margin-top: 9px;" [src]="backservice.individualStatus[child.label] ? imgCheck : imgUncheck">
+          <div class="body-1 title_msg mt-2 ml-2">{{ objLang.translates['commonmenu'+child.label] }}</div>
+        </div>
+        <div class="body-1 mt-2 status_msg text-left">{{ backservice.individualStatus[child.label] ? 'Completed' : 'Not Completed' }}</div>
+      </button>
+      <div class="w-1/3 h-20 float-left" *ngIf="child.label == 'documents'"></div>
+    </ng-container>
+
+      <div (click)="child.route()" *ngIf="isLink(child) && isFunction(child.route)" class="navigation-menu-item"
+        mat-menu-item>
+        <mat-icon [icIcon]="child.icon"></mat-icon>
+        <span>{{ child.label }}</span>
+      </div>
+
+      <ng-container *ngIf="isDropdown(child)">
+        <button [matMenuTriggerFor]="level1" class="navigation-menu-item" mat-menu-item>
+          <mat-icon [icIcon]="child.icon"></mat-icon>
+          <span>{{ child.label }}</span>
+        </button>
+
+        <mat-menu #level1="matMenu" yPosition="below">
+          <ng-container *ngFor="let item of child.children">
+            <ng-container [ngTemplateOutletContext]="{ item: item }" [ngTemplateOutlet]="linkTemplate"></ng-container>
+
+            <ng-container *ngIf="isDropdown(item)">
+              <button [matMenuTriggerFor]="level2" class="navigation-menu-item" mat-menu-item>{{
+                objLang.translates['commonmenu'+item.label] }}</button>
+
+              <mat-menu #level2="matMenu" yPosition="below">
+                <ng-container *ngFor="let child of item.children">
+                  <ng-container [ngTemplateOutletContext]="{ item: child }" [ngTemplateOutlet]="linkTemplate">
+                  </ng-container>
+
+                  <ng-container *ngIf="isDropdown(child)">
+                    <button [matMenuTriggerFor]="level3" class="navigation-menu-item" mat-menu-item>{{ child.label
+                      }}</button>
+
+                    <mat-menu #level3="matMenu" yPosition="below">
+                      <ng-container *ngFor="let item of child.children">
+                        <ng-container [ngTemplateOutletContext]="{ item: item }" [ngTemplateOutlet]="linkTemplate">
+                        </ng-container>
+
+                        <ng-container *ngIf="isDropdown(item)">
+                          <button [matMenuTriggerFor]="level4" class="navigation-menu-item" mat-menu-item>{{
+                            objLang.translates['commonmenu'+item.label] }}</button>
+
+                          <mat-menu #level4="matMenu" yPosition="below">
+                            <ng-container *ngFor="let child of item.children">
+                              <ng-container [ngTemplateOutletContext]="{ item: child }"
+                                [ngTemplateOutlet]="linkTemplate"></ng-container>
+
+                              <ng-container *ngIf="isDropdown(child)">
+                                <button [matMenuTriggerFor]="level5" class="navigation-menu-item" mat-menu-item>{{
+                                  child.label }}</button>
+
+                                <mat-menu #level5="matMenu" yPosition="below">
+                                  <ng-container *ngFor="let item of child.children">
+                                    <ng-container [ngTemplateOutletContext]="{ item: item }"
+                                      [ngTemplateOutlet]="linkTemplate"></ng-container>
+                                  </ng-container>
+                                </mat-menu>
+                              </ng-container>
+                            </ng-container>
+                          </mat-menu>
+                        </ng-container>
+                      </ng-container>
+                    </mat-menu>
+                  </ng-container>
+                </ng-container>
+              </mat-menu>
+            </ng-container>
+          </ng-container>
+        </mat-menu>
+      </ng-container>
+
+    </ng-container>
+  </mat-menu>
+
+  <ng-template #linkTemplate let-item="item">
+    <a *ngIf="isLink(item) && !isFunction(item.route)" (click)="objAuth.goPage(item.route)" class="navigation-menu-item"
+      mat-menu-item>{{ objLang.translates['commonmenu'+item.label] }}</a>
+
+    <div (click)="item.route()" *ngIf="isLink(item) && isFunction(item.route)" class="navigation-menu-item"
+      mat-menu-item>{{ objLang.translates['commonmenu'+item.label] }}</div>
+  </ng-template>
+</ng-container>

@@ -1,0 +1,89 @@
+<vex-page-layout class="w-full px-gutter container">
+  <vex-secondary-toolbar current="Languages">
+    <vex-breadcrumbs [crumbs]="['Admin', 'Languages']" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
+
+  <!-- CONTENT -->
+<div class="container" vexContainer>
+    <div id="overlay" *ngIf="isProcessing">
+        <mat-spinner class="waiting-spinner"></mat-spinner>
+    </div>
+    <div class="add-lang-btn">
+      <button mat-raised-button color="primary" (click)="openDialog()">Add Language</button>
+    </div>  
+    <mat-form-field appearance="legacy">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+    
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> No </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i=index;">
+            <span class="mobile-label">No:</span>
+            {{i+1}} 
+          </mat-cell>
+        </ng-container>
+    
+        
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Language </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Language:</span>
+            {{row.name}} 
+          </mat-cell>
+        </ng-container>
+    
+        <!-- Progress Column -->
+        <ng-container matColumnDef="foreign">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Language Foreign </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">Language:</span>
+            {{row.foreign}} 
+          </mat-cell>
+        </ng-container>
+
+        <!-- Color Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Activate </mat-header-cell>
+          <mat-cell *matCellDef="let row"> 
+            <span class="mobile-label">Activate:</span>
+            <mat-slide-toggle color="primary" [checked]="row.status" (change)="onActiveChange($event, row.id, row.name)" [disabled]="row.id==1?true:false"></mat-slide-toggle>
+          </mat-cell>
+        </ng-container>
+        
+        <!-- actions -->
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef> 
+              Action
+            </mat-header-cell>
+      
+          <mat-cell *matCellDef="let row; let i=index;">
+            <span class="mobile-label">Action:</span>
+            <a mat-icon-button color="primary" routerLink="language/{{row.id}}">
+              <mat-icon [icIcon]="icEdit"></mat-icon>
+            </a>
+            
+            <button mat-icon-button color="accent" (click)="deleteLang(row.id)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+                
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"></mat-paginator>
+    </div> 
+</div>
+
+</vex-page-layout>
+
+
+

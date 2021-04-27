@@ -1,0 +1,14 @@
+<vex-page-layout class="w-full px-gutter container">
+  <h1 class="display-1 mb-2 pt-9" fxLayout="row" fxLayoutAlign="start center">
+    <span @scaleIn
+          [style.background-color]="theme.colors.primary['500'] | colorFade:0.9"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-primary-500 ltr:mr-4 rtl:ml-4 flex items-center justify-center">
+      <ic-icon [icon]="icCalc" class="text-xl sm:text:2xl"></ic-icon>
+    </span>
+    <span @fadeInRight class="block text-2xl sm:text-3xl">{{objLang.translates['commonmenuliving_space']}}</span>
+  </h1>
+  <div @fadeInUp class="calculator-page calc-household">
+    <app-livingspace-detail [user]="objAuth.user" *ngIf="objAuth.user"></app-livingspace-detail>
+  </div>
+
+</vex-page-layout>

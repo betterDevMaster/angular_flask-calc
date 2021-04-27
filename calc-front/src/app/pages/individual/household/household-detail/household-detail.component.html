@@ -1,0 +1,79 @@
+<ng-container *ngIf="martial_status">
+    <div fxLayout="row wrap" class="row">
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60" class="column">
+        <!-- Inputs -->
+        <mat-card class="max-w-full household-inputs-card mt-6 p-0 h-80 sm:relative sm:overflow-hidden">
+          <mat-card-content class="pr-8 pl-8 pb-8 w-full">
+            <div class="flex-container heading-1 row-calc-end pt-8" *ngFor="let householdHeading of householdHeadings; let i=index">
+              <div fxLayout="row" fxLayoutAlign="start end" class="pb-3 sm:pb-1">
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333" fxFlexAlign="center" class="column font-medium text-sm sm:text-xl sm:pb-3">
+                  {{householdHeading.title}}
+                </div>
+                <ng-container *ngIf="martial_status != 'martial_single'">
+                  <div fxLayout="column" class="column sm:font-medium" fxFlex="33.333" fxLayoutAlign="center end">
+                      {{objLang.translates['individualindividualperson']}} 1
+                  </div>
+                  <div fxLayout="column" class="column sm:font-medium" fxFlex="33.333"  fxLayoutAlign="center end" >
+                    {{objLang.translates['individualindividualperson']}} 2
+                  </div>
+                </ng-container>
+              </div>
+              <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngFor="let householdInput of householdInputs[householdHeading.name]">
+                <!-- Label -->
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333" fxFlexAlign="center" class="column">
+                  <div fxLayout="row" fxLayoutAlign="start center" class="text-xs font-bold sm:text-sm sm:font-normal">
+                    {{householdInput.title}}
+                    <button matPrefix mat-icon-button
+                        matTooltipPosition="after" [matTooltip]="objLang.translates['individualindividualtip_'+householdInput.name]"
+                        aria-label="Button that displays a tooltip when focused or hovered over" class="content-info-btn">
+                        <mat-icon [icIcon]="icInfo" class="text-primary-500 ml-1 text-sm sm:text-base "></mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <!-- Person 1 -->
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33.333"  fxFlexAlign="center" class="column text-xs">
+                  <mat-form-field appearance="outline" fxFlexLayout="start end">
+                    <input matInput type="number" matInput [(ngModel)]="householdInput.val[0]" (input)="inputChanged($event)"/>
+                    <span matSuffix>{{user.fx}}</span>
+                  </mat-form-field>
+                </div>
+                <!-- Person 2 -->
+                <div fxLayout="column" class="pr-4" fxFlex="100" fxFlex.gt-sm="33.333" fxFlexAlign="center" *ngIf="martial_status != 'martial_single'">
+                  <mat-form-field appearance="outline" >
+                    <input matInput type="number" matInput [(ngModel)]="householdInput.val[1]" (input) = "inputChanged($event)" />
+                    <span matSuffix>{{user.fx}}</span>
+                  </mat-form-field>
+                </div>      
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>    
+      <!-- Outputs -->
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" class="column">
+        <mat-card class="max-w-full mt-6 p-8">
+          <div *ngIf="isCalculating" class="cal-spinner">
+            <app-spinners [loaderFor]="''"></app-spinners>
+          </div>
+          <div class="flex-container heading-1 row-calc-end">
+            <div class="pb-3 font-medium text-sm sm:text-xl sm:pb-4">Summary</div>
+            <div fxLayout="row wrap" class="row-calc pt-2 pb-2" fxLayoutAlign="space-between center" *ngFor="let householdOutputHeading of householdOutputHeadings">
+              <!-- Label -->
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="40" fxFlexAlign="center" class="column text-xs sm:text-sm">
+                {{householdOutputHeading.title}}
+              </div>
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="60"  fxFlexAlign="center" class="column text-sm font-extrabold sm:text-2xl">
+                <div fxLayout="row wrap" fxLayoutAlign="end center">
+                  {{user.fx}}{{householdOutputs[householdOutputHeading.name]}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end center" class="pt-6" *ngIf="objAuth.user['user_role'] != 'admin'">
+            <button mat-raised-button color="primary" [ngClass]="['bg-green-500', 'text-contrast-white']" (click)="saveInputs()" class="content-next-btn ml-2 mr-2">{{objLang.translates['commongeneralsave']}}</button>
+            <button mat-raised-button color="primary" (click)="objAuth.goPage('/individual/special')" class="next_btn">Go to Project data</button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>

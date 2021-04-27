@@ -1,0 +1,158 @@
+<vex-page-layout class="w-full px-gutter container">
+
+  <vex-secondary-toolbar current="Countries">
+    <vex-breadcrumbs [crumbs]="['Admin', 'Countries']" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
+
+  <div vexContainer class="container">
+    <div class="add-country-btn">
+        <button mat-raised-button color="primary" (click)="openAddDialog()">Add Country</button>
+      </div>  
+      <mat-form-field appearance="legacy">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      </mat-form-field>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+      
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>No</mat-header-cell>
+            <mat-cell *matCellDef="let row let i=index;">
+              <span class="mobile-label">No:</span>
+              {{i+1}} 
+            </mat-cell>
+          </ng-container>
+      
+          <!-- Progress Column -->
+          <ng-container matColumnDef="country">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Country</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <span class="mobile-label">Country:</span>
+              {{row.name}} 
+            </mat-cell>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="currency">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <span class="mobile-label">Currency:</span>
+              {{row.currency}} 
+            </mat-cell>
+          </ng-container>
+      
+          <!-- Color Column -->
+          <ng-container matColumnDef="fx">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>FX</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+                <span class="mobile-label">FX:</span>
+                {{row.fx}} 
+            </mat-cell>
+          </ng-container>
+          
+          <!-- Color Column -->
+          <ng-container matColumnDef="land_register">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Land register</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Land register:</span>
+              {{row.land_register}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="right_of_lien">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Right of lien</mat-header-cell>
+              <mat-cell *matCellDef="let row"> 
+                <span class="mobile-label">Right of lien:</span>
+                {{row.right_of_lien}} 
+              </mat-cell>
+            </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="solvency">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Solvency</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Solvency:</span>
+              {{row.solvency}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="abstract_lr">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Abstract</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Abstract:</span>
+              {{row.abstract_lr}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="valuation_fee">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Valuation</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Valuation:</span>
+              {{row.valuation_fee}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="solvency_rate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Solvency rate</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Solvency rate:</span>
+              {{row.solvency_rate}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="reference_1">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Reference rate 1</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Reference rate 1:</span>            
+              {{row.reference_1}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="reference_2">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Reference rate 2</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Reference rate 2:</span>
+              {{row.reference_2}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="stamp_duty">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Stamp duty</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Stamp duty:</span>
+              {{row.stamp_duty}} 
+            </mat-cell>
+          </ng-container>
+          <!-- Color Column -->
+          <ng-container matColumnDef="country_costs">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Country costs</mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+              <span class="mobile-label">Country costs:</span>
+              {{row.country_costs}} 
+            </mat-cell>
+          </ng-container>
+            <!-- Color Column -->
+          <!-- actions -->
+          <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+            <mat-cell *matCellDef="let row; let i=index;"> 
+              <span class="mobile-label">Action:</span>  
+              <button mat-icon-button color="primary" (click)="openEditDialog(i)">
+                  <mat-icon [icIcon]="icEdit"></mat-icon>
+              </button>
+              
+              <button mat-icon-button color="accent" (click)="deleteCountry(row.id)">
+                  <mat-icon [icIcon]="icDelete"></mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container> 
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[10, 20, 30, 50, 100]"></mat-paginator>
+      </div>
+            
+  </div>
+
+</vex-page-layout>
+

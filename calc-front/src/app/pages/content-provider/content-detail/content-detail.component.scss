@@ -1,0 +1,135 @@
+.example-action-buttons {
+    padding-bottom: 20px;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  mat-form-field, .surcharge-section {
+    width: 100%;
+  }
+  table{
+    width: 100%;
+  }
+  .update-btn{
+    float: right;
+  }
+  .inputError{
+    color: red;
+    margin-top: -15px;
+  }
+  .autocomplete-arrow{
+    cursor: pointer;
+  }
+  .waiting-spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031; /* High z-index so it is on top of the page */
+    top: 50%;
+    right: 50%; /* or: left: 50%; */
+  }
+  .sticky{
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    z-index: 10;
+    width: 100%;
+  }
+  .content-prev-btn{
+    float: left;
+  }
+  .page-layout.simple.fullwidth > .content{
+    flex: unset !important;
+  }
+  .content-icon-add{
+    margin-bottom: 1.5em !important;
+  }
+  .content-icon-remove{
+    // margin-left: 1em !important;;
+  }
+  // .content-icon-add .icon-add{
+  //   vertical-align: baseline !important;
+  // }
+  .mat-form-field-wrapper{
+    margin: 0 !important;
+  }
+  .content-info-btn{
+    font-size: 16px;
+    width: 25px;
+    height: 25px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-left: 10px;
+  }
+  .content-title-bar{
+    align-items: baseline;
+  }
+  
+  .row{
+    margin-left: -8px;
+    margin-right: -8px;
+}
+.column{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+// .button-group{
+//   position: fixed;
+//   right: 0;
+//   bottom: 0;
+//   z-index: 10000;
+// }
+.mobile-label {
+  display: none;
+}
+.mat-column{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.mat-column-no {
+  flex: 0 0 5%;
+}
+.mat-column-name, .mat-column-foreign{
+  flex: 0 0 25%;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 100px;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row { 
+    flex-direction: column;
+    align-items: start;
+    padding: 0;
+  }
+  .mat-cell{
+    padding-left: 0;
+  }
+  .mat-column{
+    flex: 0 0 100% !important;
+  }
+}
+  
+  

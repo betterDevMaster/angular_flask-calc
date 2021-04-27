@@ -1,0 +1,202 @@
+<vex-page-layout class="w-full px-gutter container" *ngIf="stressBasisData">
+
+    <h1 class="display-1 mb-2 pt-9" fxLayout="row" fxLayoutAlign="start center">
+        <span @scaleIn
+            [style.background-color]="theme.colors.primary['500'] | colorFade:0.9"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full text-primary-500 ltr:mr-4 rtl:ml-4 flex items-center justify-center">
+        <ic-icon [icon]="icCalc" class="text-xl sm:text:2xl"></ic-icon>
+        </span>
+        <span @fadeInRight class="block text-2xl sm:text-3xl">Loan details</span>
+    </h1>
+
+
+
+
+    <div vexContainer class="container calculator-page mb-20">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div class="message_card" fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <div fxLayout="row" fxFlex='100' fxLayoutAlign="space-between center">
+                    <input type="text" value="Wohnhaus neubaugasse" />
+                    <p class="loan_id">AT 000 000 IAAA
+                    </p>
+                </div>
+
+            </div>
+            <div class="message_card" fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <button mat-raised-button color="primary">{{objLang.translates['individualdashboardcreate_document']}}</button>&nbsp;
+                <button mat-raised-button color="primary">{{objLang.translates['individualdashboardsettings']}}</button>&nbsp;
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" class="border-solid border-r border-t border-gray-400 mb-6"
+            style="background: white;margin-top: 8px;">
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="calc(25%-1px)"
+                class="border-solid border-l border-b border-gray-400" style="    padding: 15px;">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxFlex="70" fxFlex.gt-sm="75" fxLayoutAlign="center start">
+                        <div fxLayout="row" fxLayoutAlign="start center" class="message_txt text-xs sm:text-xl">
+                            <p> <b>{{objLang.translates['individualloan_detailscurrent_repyament_rate']}}</b> : € {{stressBasisData.repaymentregular}}</p>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" class="message_txt text-xs sm:text-xl">
+                            <p> <b>{{objLang.translates['individualloan_detailscurrent_lending_rate']}}</b> : {{stressBasisData.lendingrate}} %</p>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" class="message_txt text-xs sm:text-xl">
+                            <p> <b>{{objLang.translates['individualloan_detailstype_of_interest_rate']}}</b>: {{objLang.translates['individualloan_detailsvariable']}} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="calc(25%-1px)"
+                class="border-solid border-l border-b border-gray-400" style="    padding: 15px;">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="message_txt text-xs sm:text-xl">
+                            <p><b>{{objLang.translates['individualdashboardstate']}}</b> : {{objLang.translates['individualdashboardactive']}}</p>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="message_txt text-xs sm:text-xl">
+                            <p><b>{{objLang.translates['individualdashboardstart']}}</b> : {{stressCurrentData.startDate}}</p>
+                            <p><b>{{objLang.translates['individualdashboardend']}}</b> : {{stressCurrentData.endDate}}</p>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="message_txt text-xs sm:text-xl">
+                            <p><b>{{objLang.translates['individualloan_detailsloan_maturity']}}</b> : {{stressBasisData.horizon}} yrs</p>
+                            <p><b>{{objLang.translates['individualloan_detailsremaining_term']}}</b> : {{stressBasisData.remaininghorizon}} yrs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="calc(25%-1px)"
+                class="border-solid border-l border-b border-gray-400" style="    padding: 15px;">
+                <div fxLayout="row wrap" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxFlex="100">
+                        <button mat-raised-button color="primary">{{objLang.translates['individualloan_detailsloan_adjustment']}}</button>
+                    </div>
+                    <div fxLayout="column" fxFlex="100" style="margin-top: 5px;">
+                        <button mat-raised-button color="primary">{{objLang.translates['individualloan_detailsloan_data']}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <div class="message_card" fxFlex.gt-sm="70" fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <mat-card style="background: hsl(11deg 1% 15% / 90%);border-radius: 0;">
+                    <div echarts [options]="linBarchartOptions" class="demo-chart"></div>
+                </mat-card>
+            </div>
+
+            <div class="message_card" fxLayout.lt-md="column" fxFlex.gt-sm="30" fxFlex.lt-md="100">
+                <mat-card style="background: hsl(11deg 1% 15% / 90%);border-radius: 0;">
+                    <div echarts [options]="pieChartOptions" class="demo-chart"></div>
+                </mat-card>
+            </div>
+
+        </div>
+        <div style="margin: 5px;"></div>
+        <div fxLayout="row wrap" fxLayoutGap="2px" fxLayoutAlign="space-between stretch">
+            <div class="message_card" fxFlex.gt-sm="69" fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <mat-card style="background: hsl(11deg 1% 15% / 90%);">
+                    <div echarts [options]="linBarchartOptions1" class="demo-chart"></div>
+                </mat-card>
+            </div>
+            <div fxLayout.lt-md="column"  fxFlex.gt-sm="29" fxFlex.lt-md="100">
+                <div fxLayout="column"  fxFlex="100">
+                <mat-card style="height: 100%;">
+                        <div  fxLayout="column"  fxLayoutGap="13px">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
+                                <p style="font-size: 17px;
+                            font-weight: 600;
+                            text-decoration: underline;">{{objLang.translates['individualloan_detailscurrent_situation']}}</p>
+                            </div>
+                            <p><b>{{objLang.translates['individualloan_detailscurrent_remaining_debt']}}</b> :<b> € {{stressBasisData.remainingsp ? stressBasisData.remainingsp : 0 }} </b></p>
+                            <p><b>{{objLang.translates['individualloan_detailscurrent_lending_rate']}}</b> :<b> {{stressBasisData.lendingrate ? stressBasisData.lendingrate : 0 }}%</b></p>
+                            <p><b>{{objLang.translates['individualloan_detailscurrent_repyament_rate']}}</b>: <b>€ {{stressBasisData.repaymentregular ? stressBasisData.repaymentregular : 0 }}</b></p>
+                        </div>
+
+
+                        <div style="margin-top:34px" fxLayout="column"  fxLayoutGap="13px">
+                            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
+                                <p style="font-size: 17px;
+                            font-weight: 600;
+                            text-decoration: underline;">Simulation</p>
+                            </div>
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxFlex="70">
+                                    <p><b>{{objLang.translates['individualloan_detailstotal_additional_interest_payments']}}</b> </p>
+                                </div>
+                                <div fxLayout="column" fxFlex="30" fxLayoutAlign="center start">
+                                        <p><b>
+                                    € {{stressCurrentData.totalAddition ? stressCurrentData.totalAddition : 0}}
+                                    </b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px" fxLayout="row" fxLayoutAlign="center center">
+                            <button  style="margin-top:24px" mat-flat-button color="primary">{{objLang.translates['individualloan_detailsopen_repayment_plan']}}</button>
+                        </div>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center" class="mt-10 mb-5 ">
+            <div fxLayout="column" fxFlex.lt-md="100">
+                <button (click)="appendStress()" mat-flat-button color="primary">{{objLang.translates['individualloan_detailsadd_new_stress_scenario']}}</button>
+            </div>
+        </div>
+        <div *ngIf="!stressReqData.length" style="text-align: center;margin: 5px;">
+            No stress scenario added
+        </div>
+        <table *ngIf="stressReqData.length" style="margin-bottom:50px">
+            <thead>
+            <tr>
+            <th >{{objLang.translates['individualloan_detailsstressscenario']}}</th>  
+            <th style="text-align: center;">{{objLang.translates['individualloan_detailsinterest']}}</th>
+              <th style="text-align: center;">{{objLang.translates['individualdashboardstart']}}</th>
+              <th style="text-align: center;">{{objLang.translates['individualdashboardend']}}</th>
+              <th></th>
+              <th></th>
+              <th style="width: 100%;">repayment rate ranges</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let each of stressReqData;let i = index; trackBy: trackById">
+              <tr>
+              <td># {{i+1}}</td>
+              <td>
+                <mat-form-field appearance="outline">
+                    <mat-select  [(ngModel)]="each.interest"[name]="'interest' + i" >
+                        <mat-option *ngFor="let eachPercentage of interestPercentages" [value]="eachPercentage">{{eachPercentage}} %
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  
+              </td>
+                <td>
+                    <input type="date"  [(ngModel)]="each.startDate"[name]="'start' + i" style="padding: 5px;"/>
+                </td>
+                <td>
+                    <input type="date"  [(ngModel)]="each.endDate"[name]="'end' + i" style="padding: 5px;"/>
+                </td>
+                <td>
+                    <button (click)="removeByIndex(i)" >X</button>
+                    <!-- <mat-icon style="cursor: pointer;"  [icIcon]="icDelete"></mat-icon> -->
+                </td>
+                <td>
+                    <button (click)="stressCalculate(i)" [disabled]="!each.startDate || !each.endDate || !each.interest" color="primary" mat-flat-button >{{objLang.translates['individualloan_detailscalculate']}}</button>
+                </td>
+                <td>
+                    {{
+                       each.remarks
+                    }}
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          
+    </div>
+
+</vex-page-layout>

@@ -1,0 +1,30 @@
+<!-- CONTENT -->
+<div class="px-gutter p-6 container" vexContainer>
+    <div id="overlay" *ngIf="isProcessing">
+        <mat-spinner class="waiting-spinner" [diameter]="50"></mat-spinner>
+    </div>
+
+    <!-- Buttons -->
+    <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-raised-button color="primary" class="mr-3" (click)="saveLangs()" [disabled]="!changedFlag">Save</button>
+        <button mat-raised-button color="primary" (click)="goBack()">Back</button>
+    </div>
+    
+    <div class="pt-6" *ngFor="let page of contents">
+        <div class="title pb-3">{{page.title}}</div>
+        <div fxLayout="row wrap" class="row">
+            <div *ngFor="let content of page.children" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="33.333" class="column">
+                <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>{{content.title}}</mat-label>
+                    <input *ngIf="content.type!='tip'" matInput (input)="onChange()" [(ngModel)]="langs[page.name+content.name]">
+                    <!-- <input *ngIf="content.type=='tip'" matInput (input)="onChange()" [(ngModel)]="langs[page.name+content.name]"> -->
+                    <textarea *ngIf="content.type=='tip'" matInput cdkTextareaAutosize 
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5" [(ngModel)]="langs[page.name+content.name]" (input)="onChange()"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>
+    

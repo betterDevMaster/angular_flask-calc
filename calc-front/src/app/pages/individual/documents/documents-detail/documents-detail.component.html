@@ -1,0 +1,124 @@
+<ng-container *ngIf="martial_status">
+  <mat-card class="max-w-full mt-6 p-8">
+    <div class="flex-container heading-1 pt-8 row-result-end calc-documents-container" *ngFor="let documentHeading of documentHeadings; let k = index;">
+      <!-- Heading title, Person 1, Person 2 -->
+      <div fxLayout="row wrap" fxLayoutAlign="start center" class=" row-result-end">
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="30" fxFlexAlign="center" class="font-medium text-sm sm:text-xl sm:pb-3">
+          {{objLang.translates['individualdocuments'+documentHeading.name]}}
+        </div>
+        <ng-container *ngIf="martial_status != 'martial_single' && k<4">
+          <div fxLayout="column" class="column sm:font-medium" fxFlex="20" fxLayoutAlign="center end">
+              {{objLang.translates['individualindividualperson']}} 1
+          </div>
+          <div fxLayout="column" class="column sm:font-medium" fxFlex="50"  fxLayoutAlign="center end" >
+            {{objLang.translates['individualindividualperson']}} 2
+          </div>
+        </ng-container>
+      </div>
+      <!-- Documents -->
+      <div fxLayout="row wrap" fxLayoutAlign="start start" class="row pt-4">
+        <!-- Documents for Person 1 -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="{{martial_status == 'martial_single'?100:50}}" fxLayoutAlign="start center" class="column">
+          <!-- For heading that has multiple document -->
+          <ng-container *ngIf="documentHeading.more">
+            <ng-container *ngFor="let document_item of documents[documentHeading.name]['person_1']; let i=index">
+              <mat-card class="w-full mb-4" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="documents[documentHeading.name]['person_1'].length == 1 || (documents[documentHeading.name].person_1.length > 1 && i != documents[documentHeading.name]['person_1'].length-1) || (documents[documentHeading.name]['person_1'].length > 1 && i == documents[documentHeading.name]['person_1'].length-1 && documentHeading.add_enable == true)">
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="90" fxLayoutAlign="center start">
+                  <a class="text-primary-500 underline" *ngIf="document_item != ''" [href]="environment.baseUrl + '/uploads/' + documentHeading.name + '/person_1/' + document_item" target="_self">{{document_item}}</a>
+                  <div *ngIf="document_item == ''">{{objLang.translates['individualdocumentsno_file']}}</div>
+                </div>
+                <div fxLayout="column">
+                  <div fxLayout="row">
+                    <div fxLayout="column" class="file-wrapper">
+                      <button class="btn" mat-icon-button color="primary" class="upload_btn"><mat-icon [icIcon]="icUpload"></mat-icon></button>
+                      <input type="file" class="inputfile" (change)="handleFileInput($event.target.files, documentHeading.name, 'person_1', i)">
+                    </div>
+                    <button fxLayout="column" *ngIf="document_item != ''" mat-icon-button color="warn" (click)="deleteDocument(document_item, documentHeading.name, 'person_1', i)">
+                      <mat-icon [icIcon]="icDelete">delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-card>   
+              <div fxLayout="row wrap" *ngIf="(documents[documentHeading.name]['person_1'].length > 1 && i == documents[documentHeading.name]['person_1'].length-1 && documentHeading.add_enable == false)" fxLayoutAlign="center center">
+                <div fxLayout="column" fxFlex="100" fxLayoutAlign="center center"> 
+                  <button mat-icon-button color="primary" (click)="enableAdd(k)" class="add-floor-btn">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                  </button>
+                </div>
+              </div>                
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!documentHeading.more">
+            <mat-card class="w-full mb-4" fxLayout="row" fxLayoutAlign="space-between center">
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="90" fxLayoutAlign="center start">
+                <a class="text-primary-500 underline" *ngIf="documents[documentHeading.name]['person_1'] != ''" [href]="environment.baseUrl + '/uploads/' + documentHeading.name + '/person_1/' + documents[documentHeading.name]['person_1']" target="_self">{{documents[documentHeading.name]['person_1']}}</a>
+                <div *ngIf="documents[documentHeading.name]['person_1'] == ''">{{objLang.translates['individualdocumentsno_file']}}</div>
+              </div>
+              <div fxLayout="column">
+                <div fxLayout="row">
+                  <div fxLayout="column" class="file-wrapper">
+                    <button class="btn" mat-icon-button color="primary"><mat-icon [icIcon]="icUpload"></mat-icon></button>
+                    <input type="file" class="inputfile" (change)="handleFileInput($event.target.files, documentHeading.name, 'person_1', 0)">
+                  </div>
+                  <button fxLayout="column" *ngIf="documents[documentHeading.name]['person_1'] != ''" mat-icon-button color="warn" (click)="deleteDocument(documents[documentHeading.name]['person_1'], documentHeading.name, 'person_1', 0)">
+                    <mat-icon [icIcon]="icDelete">delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-card>
+          </ng-container>
+        </div>
+        <!-- Documents for Person 2 -->
+        <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="{{martial_status == 'martial_single'?100:50}}" class="column" *ngIf="k<4 && martial_status != 'martial_single'" fxLayoutAlign="start center">
+          <ng-container *ngIf="documentHeading.more">
+            <ng-container *ngFor="let document_item of documents[documentHeading.name]['person_2']; let i=index">
+              <mat-card class="w-full mb-4" fxLayout="row" fxLayoutAlign="space-between center" class="w-full" *ngIf="documents[documentHeading.name]['person_2'].length == 1 || (documents[documentHeading.name].person_2.length > 1 && i != documents[documentHeading.name]['person_2'].length-1) || (documents[documentHeading.name]['person_2'].length > 1 && i == documents[documentHeading.name]['person_2'].length-1 && documentHeading.add_enable == true)">
+                <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="90" fxLayoutAlign="center start">
+                  <a class="text-primary-500 underline" *ngIf="document_item != ''" [href]="environment.baseUrl + '/uploads/' + documentHeading.name + '/person_2/' + document_item" target="_self">{{document_item}}</a>
+                  <div *ngIf="document_item == ''">{{objLang.translates['individualdocumentsno_file']}}</div>
+                </div>
+                <div fxLayout="column">
+                  <div fxLayout="row">
+                    <div fxLayout="column" class="file-wrapper">
+                      <button class="btn" mat-icon-button color="primary" class="upload_btn"><mat-icon [icIcon]="icUpload"></mat-icon></button>
+                      <input type="file" class="inputfile" (change)="handleFileInput($event.target.files, documentHeading.name, 'person_2', i)">
+                    </div>
+                    <button fxLayout="column" *ngIf="document_item != ''" mat-icon-button color="warn" (click)="deleteDocument(document_item, documentHeading.name, 'person_2', i)">
+                      <mat-icon [icIcon]="icDelete">delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-card>   
+              <div fxLayout="row" *ngIf="(documents[documentHeading.name]['person_2'].length > 1 && i == documents[documentHeading.name]['person_2'].length-1 && documentHeading.add_enable == false)" fxLayoutAlign="center center">
+                <div fxLayout="column" fxFlex="100" fxLayoutAlign="center center"> 
+                  <button mat-icon-button color="primary" (click)="enableAdd(k)" class="add-floor-btn">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                  </button>
+                </div>
+              </div>                
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!documentHeading.more">
+            <mat-card class="w-full mb-4" fxLayout="row">
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="90" fxLayoutAlign="center start">
+                <a class="text-primary-500 underline" *ngIf="documents[documentHeading.name]['person_2'] != ''" [href]="environment.baseUrl + '/uploads/' + documentHeading.name + '/person_2/' + documents[documentHeading.name]['person_2']" target="_self">{{documents[documentHeading.name]['person_2']}}</a>
+                <div *ngIf="documents[documentHeading.name]['person_2'] == ''">{{objLang.translates['individualdocumentsno_file']}}</div>
+              </div>
+              <div fxLayout="column">
+                <div fxLayout="row">
+                  <div fxLayout="column" class="file-wrapper">
+                    <button class="btn" mat-icon-button color="primary"><mat-icon [icIcon]="icUpload"></mat-icon></button>
+                    <input type="file" class="inputfile" (change)="handleFileInput($event.target.files, documentHeading.name, 'person_2', 0)">
+                  </div>
+                  <button fxLayout="column" *ngIf="documents[documentHeading.name]['person_2'] != ''" mat-icon-button color="warn" (click)="deleteDocument(documents[documentHeading.name]['person_2'], documentHeading.name, 'person_2', 0)">
+                    <mat-icon [icIcon]="icDelete">delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-card>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</ng-container >

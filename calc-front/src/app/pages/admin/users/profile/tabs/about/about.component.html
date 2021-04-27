@@ -1,0 +1,138 @@
+<div class="container py-gutter">
+  <div class="card overflow-hidden">
+    <div class="h-64 relative overflow-hidden">
+      <img class="w-full object-cover" src="assets/img/demo/landscape.jpg">
+      <div class="absolute bg-contrast-black opacity-25 top-0 right-0 bottom-0 left-0 w-full h-full z-0"></div>
+
+      <!-- <img class="avatar h-24 w-24 absolute top-6 left-4"
+           fxFlex="none"
+           fxFlexAlign="start"
+           fxHide.gt-xs
+           src="assets/img/avatars/1.jpg"> -->
+    </div>
+
+    <div class="z-10 relative -mt-24 px-gutter" fxLayout="row" fxLayoutAlign="start center">
+
+      <img @scaleIn
+           class="avatar h-24 w-24"
+           fxFlex="none"
+           fxFlexAlign="start"
+           fxHide.xs
+           src="assets/img/avatars/profile.jpg">
+
+      <div [ngClass.gt-xs]="['ltr:ml-6 rtl:mr-6']" class="max-w-full" fxFlex="auto">
+        <div class="h-16" fxLayout="row" fxLayoutAlign="start center">
+          <h1 @fadeInRight class="headline text-contrast-white m-0">{{user.first_name}} {{user.last_name}}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6"
+       fxLayout="row"
+       fxLayout.lt-md="column"
+       fxLayoutAlign="start start"
+       fxLayoutAlign.lt-md="start stretch"
+       fxLayoutGap="24px">
+    <div fxFlex="calc(70% - 12px)" fxFlex.lt-md="auto">
+      <div class="card">
+        <!-- <div class="px-gutter d-flex justify-content-between py-4 border-b"> -->
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="px-gutter py-4 border-b">
+          <h2 class="title m-0">About</h2>
+          <ic-icon style="cursor: pointer;" (click)="openEditDialog()" [icon]="icEdit" size="20px"></ic-icon>
+        </div>
+
+        <div class="px-gutter py-4" gdColumns="1fr 1fr" gdColumns.xs="1fr" gdGap="16px">
+          <div class="py-3" fxLayout="row" fxLayoutAlign="start center">
+            <div @scaleIn
+                 class="w-10 h-10 rounded-full bg-primary-50 text-primary-500 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <ic-icon [icon]="icMail" size="20px"></ic-icon>
+            </div>
+
+            <div @fadeInRight>
+              <p class="m-0 body-2">{{user.email}}</p>
+              <p class="m-0 caption text-hint">Contact email</p>
+            </div>
+          </div>
+          <div class="py-3" fxLayout="row" fxLayoutAlign="start center">
+            <div @scaleIn
+                 class="w-10 h-10 rounded-full bg-primary-50 text-primary-500 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <ic-icon [icon]="icWork" size="20px"></ic-icon>
+            </div>
+
+            <div @fadeInRight>
+              <p class="m-0 body-2">{{userRole[user.user_role]}}</p>
+              <p class="m-0 caption text-hint">Role</p>
+            </div>
+          </div>
+
+          
+
+          <div class="py-3" fxLayout="row" fxLayoutAlign="start center">
+            <div @scaleIn
+                 class="w-10 h-10 rounded-full bg-primary-50 text-primary-500 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <ic-icon [icon]="icLanguage" size="20px"></ic-icon>
+            </div>
+
+            <div @fadeInRight>
+              <p class="m-0 body-2">{{user['language']}}</p>
+              <p class="m-0 caption text-hint">Preferred Language</p>
+            </div>
+          </div>
+
+          <div class="py-3" fxLayout="row" fxLayoutAlign="start center">
+            <div @scaleIn
+                 class="w-10 h-10 rounded-full bg-primary-50 text-primary-500 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <ic-icon [icon]="icFlag" size="20px"></ic-icon>
+            </div>
+
+            <div @fadeInRight>
+              <p class="m-0 body-2">{{user['country']}}</p>
+              <p class="m-0 caption text-hint">Country</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-6">
+        <div class="px-gutter py-4 border-b">
+          <h2 class="title m-0">Other details</h2>
+        </div>
+
+        <div @stagger
+             class="px-gutter py-4"
+             gdColumns="1fr 1fr 1fr 1fr"
+             gdColumns.lt-lg="1fr 1fr 1fr"
+             gdColumns.xs="1fr 1fr"
+             gdGap="24px">
+             No more details
+        </div>
+      </div>
+    </div>
+
+    <div class="card" fxFlex="calc(30% - 12px)" fxFlex.lt-md="auto">
+      <div class="px-6 py-4 border-b">
+        <h2 class="title m-0">Address</h2>
+      </div>
+
+      <div @stagger class="px-6 py-4" fxLayout="column" fxLayoutGap="16px">
+        <div @fadeInRight fxFlex="auto">
+          <div class="body-2">Street</div>
+          <div class="info">{{user['street']?user['street']:'---'}}</div>
+        </div>
+        <div @fadeInRight fxFlex="auto">
+          <div class="body-2">Nr.</div>
+          <div class="info">{{user['nr']?user['nr']:'---'}}</div>
+        </div>
+        <div @fadeInRight fxFlex="auto">
+          <div class="body-2">ZIP Code</div>
+          <div class="info">{{user['zipcode']?user['zipcode']:'---'}}</div>
+        </div>
+        <div @fadeInRight fxFlex="auto">
+          <div class="body-2">City</div>
+          <div class="info">{{user['city']?user['city']:'---'}}</div>
+        </div>     
+      </div>
+    </div>
+  </div>
+</div>

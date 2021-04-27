@@ -1,0 +1,28 @@
+<vex-page-layout class="w-full px-gutter container">
+
+    <vex-secondary-toolbar current="Loan-Menu">
+        <vex-breadcrumbs [crumbs]="['Index']" fxFlex="auto"></vex-breadcrumbs>
+    </vex-secondary-toolbar>
+
+
+
+
+    <div vexContainer class="container">
+        <div fxLayout="row wrap" fxFlex=100 fxLayoutAlign="space-around center">
+            <div   fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <mat-list role="list" *ngFor="let each of pages">
+                    <mat-list-item role="listitem">
+                    <button style="width: 100%;" mat-flat-button color="primary" [routerLink]="each.url" >{{each.name}}</button>
+                    </mat-list-item>
+                  </mat-list>
+            </div>
+            <div  style="text-align: center;" fxLayout.lt-md="column" fxFlex.lt-md="100">
+                <div style="text-align: center;">
+                <img src="assets/img/loan/loan-menu.png">
+            </div>
+            </div>
+        </div>
+          
+    </div>
+
+</vex-page-layout>

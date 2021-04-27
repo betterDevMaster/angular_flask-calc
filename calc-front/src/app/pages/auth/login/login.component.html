@@ -1,0 +1,64 @@
+<div class="w-full h-full bg-pattern" fxLayout="column" fxLayoutAlign="center center">
+  <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
+    <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
+      <div class="fill-current text-center">
+        <img class="w-16" src="assets/img/demo/logo.svg">
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <!-- <h2 class="title m-0">Welcome back</h2> -->
+      <!-- <h4 class="body-2 text-secondary m-0">Sign in with your credentials below.</h4> -->
+      <h2 class="title m-0">{{objLang.translates['commonloginwelcome_back']}}</h2>
+      <h4 class="body-2 text-secondary m-0">{{objLang.translates['commonloginsign_with_credentials']}}</h4>
+    </div>
+
+    <form>
+
+    <div [formGroup]="loginForm" class="p-6" fxLayout="column" fxLayoutGap="16px">
+      <div fxFlex="auto" fxLayout="column">
+        <mat-form-field appearance="legacy" fxFlex="grow">
+          <mat-label>{{objLang.translates['commonloginemail']}}</mat-label>
+          <input formControlName="email" matInput autocomplete="on" required>
+          <mat-error *ngIf="loginForm.get('email').hasError('required')">{{objLang.translates['commonloginerrorRequired']}}</mat-error>
+          <mat-error *ngIf="!loginForm.get('email').hasError('required') && loginForm.get('email').hasError('email')">Please enter a valid email address</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="legacy" fxFlex="grow" class="mt-2">
+          <mat-label>{{objLang.translates['commonloginpassword']}}</mat-label>
+          <input [type]="inputType" formControlName="password" matInput autocomplete="on" required>
+          <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button">
+            <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+            <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+          </button>
+          <mat-hint>{{objLang.translates['commonloginclick_eye']}}</mat-hint>
+          <mat-error *ngIf="loginForm.get('password').hasError('required')">{{objLang.translates['commonloginerrorRequired']}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-checkbox class="caption" color="primary" formControlName="rememberMe">{{objLang.translates['commonloginremember_me']}}</mat-checkbox>
+        <a [routerLink]="['/forgot-password']" class="caption text-right">{{objLang.translates['commonloginforgot_password']}}</a>
+      </div>
+
+      <button (click)="loginForm.valid ? login() : ''" color="primary" mat-raised-button type="submit">
+        {{objLang.translates['commonloginlogin'] | uppercase}}
+      </button>
+
+      <p class="text-secondary text-center">
+        {{objLang.translates['commonlogindonot_account']}}<br/>
+        <a [routerLink]="['/register']">{{objLang.translates['commonloginclick_here_create']}}</a>
+      </p>
+      <div fxFlex="auto" fxLayout="column">
+        <mat-form-field appearance="legacy" fxFlex="grow">
+          <mat-label>{{objLang.translates['commonloginlanguage']}}</mat-label>
+          <mat-select [(value)]="selectedLang" (selectionChange)="setLanguage($event.value)">
+              <mat-option *ngFor="let langItem of objLang.langs" [value]="langItem.id">{{langItem.foreign}}</mat-option>
+          </mat-select>
+          <mat-icon matSuffix class="secondary-text" [icIcon]="icLanguage"></mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+  </div>
+</div>

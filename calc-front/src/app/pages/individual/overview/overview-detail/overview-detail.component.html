@@ -1,0 +1,29 @@
+
+
+<vex-page-layout *ngIf="objBack.individualStatus">
+    <div vexContainer class="absolute flex w-full overview-container p-3" fxLayoutAlign.gt-sm="center center"  fxLayoutAlign="center start">
+      <div fxLayout="row wrap" class="container row" fxLayoutAlign="center start">
+        <ng-container *ngFor="let page of objBack.pageStatus;let i=index;">
+          <div fxLayout="column" class="pt-3 pb-3 column w-full" fxFlex.gt-sm="{{page.name=='documents'?100:33.333}}" fxFlex="100" >
+            <div fxLayout="row" fxLayoutAlign="center center" class="row">
+              <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="{{page.name=='documents'?33.333:100}}" class="column">
+                <button (click)="objAuth.goPage(page.to)">
+                  <mat-card>
+                    <mat-card-header>
+                      <img mat-card-avatar [src]="objBack.individualStatus[page.name]?imgCheck:imgUncheck">
+                      <mat-card-title class="text-base sm:text-2xl">{{objLang.translates['individualoverview'+page.name]}}</mat-card-title>
+                      <mat-card-subtitle class="text-sm sm:text-base">
+                          {{objBack.individualStatus[page.name]?"Completed":"Not Completed"}}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+</vex-page-layout>
+  
+  

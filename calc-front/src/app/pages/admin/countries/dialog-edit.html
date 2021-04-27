@@ -1,0 +1,98 @@
+<h1 mat-dialog-title>Edit</h1>
+<div mat-dialog-content>
+  <mat-grid-list cols="2" rowHeight="70px">
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Country ID</mat-label>
+        <input matInput [(ngModel)]="data.id">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Country</mat-label>
+        <input matInput [(ngModel)]="data.name">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Currency</mat-label>
+        <input matInput [(ngModel)]="data.currency">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>FX</mat-label>
+        <input matInput [(ngModel)]="data.fx">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Land register</mat-label>
+        <input matInput [(ngModel)]="data.land_register">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Right of lien</mat-label>
+        <input matInput [(ngModel)]="data.right_of_lien">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Solvency</mat-label>
+        <input matInput [(ngModel)]="data.solvency">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Abstract</mat-label>
+        <input matInput [(ngModel)]="data.abstract_lr">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Valuation</mat-label>
+        <input matInput [(ngModel)]="data.valuation_fee">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Solvency rate</mat-label>
+        <input matInput [(ngModel)]="data.solvency_rate">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Reference rate 1</mat-label>
+        <input matInput [(ngModel)]="data.reference_1">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Reference rate 2</mat-label>
+        <input matInput [(ngModel)]="data.reference_2">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Stamp duty</mat-label>
+        <input matInput [(ngModel)]="data.stamp_duty">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field>
+        <mat-label>Country costs</mat-label>
+        <input matInput [(ngModel)]="data.country_costs">
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [mat-dialog-close]="save" cdkFocusInitial>Save</button>
+  <button mat-button mat-dialog-close [mat-dialog-close]="close" cdkFocusInitial>Close</button>
+</div>
+
+
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

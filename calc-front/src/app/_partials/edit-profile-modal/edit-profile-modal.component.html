@@ -1,0 +1,87 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <div>Profile</div>
+  <button type="button" mat-icon-button (click)="close(false)" tabindex="-1">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+<div >
+<form name="form" autocomplete="off" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" [style.visibility]="countries">
+  <div fxLayout="row wrap">
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-full"  >
+        <mat-label>First Name</mat-label>
+        <input [(ngModel)]="userData.first_name" #firstName="ngModel" name="first_name" matInput placeholder="Eg: John" required />
+            <mat-error *ngIf="(f.submitted && firstName.invalid) || firstName.errors?.required">First name is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Last Name</mat-label>
+        <input [(ngModel)]="userData.last_name" name="last_name" #lastName="ngModel"  matInput placeholder="Eg: Doe" required/>
+            <mat-error *ngIf="(f.submitted && lastName.invalid) || lastName.errors?.required">Last name is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Email</mat-label>
+        <input [(ngModel)]="userData.email" name="email" #email="ngModel"  required matInput placeholder="Eg: john@gmail.com" />
+            <mat-error *ngIf="(f.submitted && email.invalid) || email.errors?.required">Email is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Language</mat-label>
+        <mat-select [(ngModel)]="userData.user_language" name="user_language" #language="ngModel"  required >
+            <mat-option *ngFor="let each of objLang.langs" [value]="each.id">
+              {{each.name}}
+            </mat-option>
+          </mat-select>
+            <mat-error *ngIf="(f.submitted && language.invalid) || language.errors?.required">Language is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100">
+        <mat-label>Country</mat-label>
+        <mat-select [(ngModel)]="userData.user_country" name="user_country" #country="ngModel"  required >
+            <mat-option *ngFor="let each of countries" [value]="each.id">
+              {{each.name}}
+            </mat-option>
+          </mat-select>
+            <mat-error *ngIf="(f.submitted && country.invalid) || country.errors?.required">Country is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Street</mat-label>
+        <input [(ngModel)]="userData.street" name="street" #street="ngModel"  matInput/>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Nr.</mat-label>
+        <input [(ngModel)]="userData.nr" name="nr" #nr="ngModel"  matInput/>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>Zipcode</mat-label>
+        <input [(ngModel)]="userData.zipcode" name="zipcode" #zipcode="ngModel"  matInput/>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxFlex="100">
+        <mat-form-field appearance="legacy" class="w-100" >
+        <mat-label>City</mat-label>
+        <input [(ngModel)]="userData.city" name="city" #city="ngModel"  matInput/>
+      </mat-form-field>
+    </div>
+
+  </div>
+  <mat-dialog-actions align="end" class="pb-6">
+    <button mat-flat-button color="primary" >
+      Submit
+      <span *ngIf="submitLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+  </mat-dialog-actions>
+
+</form>
+</div>

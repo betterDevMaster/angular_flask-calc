@@ -1,0 +1,171 @@
+@import "~simplebar/dist/simplebar.css";
+@import "~highlight.js/styles/androidstudio.css";
+// Vex Core
+@import "./@vex/styles/core";
+
+
+/*
+  You can override any CSS Variable or style here
+  Example:
+
+  :root {
+   --sidenav-background: #333333;
+  }
+
+  All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
+  in Chrome/Firefox DevTools
+*/
+mat-select-country input{
+  outline: none !important;
+}
+.vex-page-layout-simple .vex-page-layout-content {
+  padding-top: 0 !important;
+}
+.setting-menu .column{
+  margin-top: -1.375rem;
+}
+.status-column{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.setting-row{
+  margin-left: -5px;
+}
+#overlay {
+  position: fixed;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+.waiting-spinner-new {
+ 
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+.waiting-spinner {
+  position: fixed !important;
+  top: calc(50vh - 25px) !important;
+  left: calc(50vw - 25px) !important;
+  z-index: 2;
+}
+.mat-option[aria-disabled=true].contains-mat-select-search .mat-icon{
+  display: none !important;
+}
+.mat-menu-panel.setting-menu{
+  min-width: 450px !important;
+}
+.mat-input-element:disabled{
+  color: black;
+}
+.row{
+  margin-left: -16px;
+  margin-right: -16px;
+}
+.column{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.vertical-layout vex-secondary-toolbar .fixed {
+  margin-bottom: 0 !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+.button-group{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+}
+.calculator-page{
+  .mat-form-field-appearance-outline .mat-form-field-flex {
+    margin-top: 0 !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.7em 0 0.7em 0 !important;
+    border-top: 0 !important;
+  }
+  .mat-select-arrow-wrapper {
+    vertical-align: bottom !important;
+    margin: 0 !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline{
+    top: 0 !important;
+  }
+  .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
+    width: 1.5em !important;
+    height: 1.5em !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0.4em !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .mat-form-field {
+    margin-bottom: 0 !important;
+  }
+  .row-calc{
+    border-top: 1px solid #e6e6e6;
+  }
+  // .row-calc-end{
+  //   border-bottom: 4px double #e6e6e6;
+  // }
+  .row-calc-end{
+    border-bottom: 1px solid #e6e6e6;
+  }
+  .row-result-end{
+    border-bottom: 1px solid #e6e6e6;
+  }
+  .mat-icon-button{
+    width: 2em !important;
+    height: 2em !important;
+    line-height: 2em !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline-start,
+  .mat-form-field-appearance-outline .mat-form-field-outline-gap, .mat-form-field-appearance-outline .mat-form-field-outline-end {
+    border-radius: 0;
+  }
+
+  .household-inputs-card {
+    
+    .mat-card-content {
+      max-height: 100%;
+      position: absolute;
+      overflow: auto;
+    }
+  }
+  
+}
+.h-80{
+  height: calc(100vh - 204px);
+}
+.calc-documents-container{
+  .mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: 1px 1px 1px 1px #eeeeee, 1px 1px 1px 1px #eeeeee, 1px 1px 1px 1px #eeeeee, 1px 1px 1px 1px #eeeeee;
+  }  
+}
+.calc-projectdata{
+  mat-checkbox{
+    height: 35px;
+    display: flex;
+    align-items: center;
+  }
+  .mat-form-field-label-wrapper {
+    top: -0.3em !important;
+  }
+}
+.cal-spinner{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  left: 50%;
+}
+
+

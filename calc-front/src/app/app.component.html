@@ -1,0 +1,6 @@
+<div id="overlay" *ngIf="objAuth.isProcessing">
+    <div class="waiting-spinner-new">
+        <app-spinners [loaderFor]="objAuth.isProcessText" ></app-spinners>
+    </div>
+</div>
+<router-outlet *ngIf="(objLang.translates | json) != '{}'"></router-outlet>

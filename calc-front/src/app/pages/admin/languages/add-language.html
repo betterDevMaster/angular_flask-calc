@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>Add Language</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="title-form" (click)="$event.stopPropagation();">
+    <div fxLayout="row" class="row">
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+            <div class="h2">Name</div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+            <mat-form-field appearance="legacy" fxFlex="100">
+                <input matInput [(ngModel)]="titleForm.name" (input)="onChange()">
+            </mat-form-field>
+        </div>
+    </div>
+    <div fxLayout="row" class="row">
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+            <div class="h2">Foreign Name</div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+            <mat-form-field appearance="legacy" fxFlex="100">
+                <input matInput [(ngModel)]="titleForm.foreign" (input)="onChange()">
+            </mat-form-field>
+        </div>
+    </div>
+    <div fxLayout="row" class="row">
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="language-label column">
+            <div class="h2">Flag</div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center start" fxFlex="50" class="column setting-column">
+            <mat-form-field appearance="legacy">
+                <mat-select [formControl]="countryCtrl" class="flag-form" placeholder="Bank" [(value)]="titleForm.flag">
+                    <mat-select-trigger>
+                        <div fxLayout="row" class="p-1">
+                            <div fxLayout="column" fxLayoutAlign="center start"><img src="https://www.countryflags.io/{{titleForm.flag['iso2']|lowercase}}/shiny/32.png"></div>
+                            <div fxLayout="column" fxLayoutAlign="center start" class="pl-2">{{titleForm.flag['name']}}</div>
+                        </div>
+                    </mat-select-trigger>
+                    <mat-option>
+                        <ngx-mat-select-search 
+                        [formControl]="countryFilterCtrl"
+                        placeholderLabel="Search"
+                        [disableScrollToActiveOnOptionsChanged]="true"
+                        noEntriesFoundLabel="No entry matches"
+                        class="flag-filter"
+                        ></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let country of filteredCountries | async;let i=index" [value]="country">
+                        <div fxLayout="row" class="p-1">
+                            <div fxLayout="column" fxLayoutAlign="center start"><img src="https://www.countryflags.io/{{country['iso2']}}/shiny/32.png"></div>
+                            <div fxLayout="column" fxLayoutAlign="center start" class="pl-2">{{country.name}}</div>
+                        </div>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button cdkFocusInitial (click)="createLang()" [disabled]="!enableCreate">Create</button>
+</mat-dialog-actions>
+
+
+<!-- Copyright 2020 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

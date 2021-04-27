@@ -1,0 +1,27 @@
+<vex-page-layout *ngIf="userData">
+  <vex-secondary-toolbar current="Overview">
+    <vex-breadcrumbs [crumbs]="['Admin', 'Users', 'Overview']" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
+  <div vexContainer>
+    <div class="content">
+      <mat-tab-group dynamicHeight="true" *ngIf="userData.user_role == 'individual'">
+        <mat-tab label="Profile">
+            <profile-about [user]="userData" ></profile-about>
+        </mat-tab>
+        <mat-tab label="Calculation">
+            <app-individual  [user]="userData" ></app-individual>
+        </mat-tab>
+      </mat-tab-group>
+      <mat-tab-group dynamicHeight="true" *ngIf="userData.user_role == 'content'">
+        <mat-tab label="Profile">
+          <profile-about [user]="userData"></profile-about>
+        </mat-tab>
+        <mat-tab label="Content">
+          <app-content-detail [user]="userData"></app-content-detail>
+        </mat-tab>
+      </mat-tab-group>
+      <profile-about *ngIf="userData.user_role == 'admin'" [user]="userData"></profile-about>
+    </div>
+  </div>
+
+</vex-page-layout>
